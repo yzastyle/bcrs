@@ -1,0 +1,8 @@
+# первый порт это порт хоста, второй порт контейнера
+docker run -d \
+  --name postgres_dev_container \
+  -e POSTGRES_USER=admin \
+  -e POSTGRES_PASSWORD=643admin643x! \
+  -e POSTGRES_DB=bcdb \
+  -p 5432:5432 \
+    postgres

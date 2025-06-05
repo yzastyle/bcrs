@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Registration page</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        .registration-container {
+            background-color: #ffffff;
+            padding: 30px 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        .registration-container h1 {
+            margin: 0 0 20px;
+            font-size: 22px;
+            text-align: center;
+            color: #333333;
+        }
+
+        .registration-container form div {
+            margin-bottom: 15px;
+        }
+
+        .registration-container input[type="text"],
+        .registration-container input[type="password"] {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #333333;
+        }
+
+        .registration-container input[type="text"]::placeholder,
+        .registration-container input[type="password"]::placeholder {
+            color: #999999;
+        }
+
+        .registration-container input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007BFF;
+            color: #ffffff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .registration-container input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="registration-container">
+    <h1>Registration page</h1>
+    <form th:action="@{/registration}" method="post">
+        <div>
+            <input type="text" name="login" placeholder="Login" />
+        </div>
+        <div>
+            <input type="text" name="name" placeholder="Name" />
+        </div>
+        <div>
+            <input type="password" name="password" placeholder="Password" />
+        </div>
+        <input type="submit" value="Register" />
+    </form>
+</div>
+</body>
+</html>

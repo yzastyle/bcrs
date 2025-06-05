@@ -1,0 +1,12 @@
+spring:
+  security:
+    enabled: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bcdb
+    username: admin
+    password: 643admin643x!
+    driver-class-name: org.postgresql.Driver
+jwt:
+  secret: jajsdj0u203jd20j2dj2dj20iejd0j0dje0jd20jd20wjd20wjd20ewjd20dj20dj20dj20edj2e0dj20edj20dj20dj20jd2
+  issuer: auth-service
+  expiration: 1800
