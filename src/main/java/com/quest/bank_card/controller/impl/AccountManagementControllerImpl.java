@@ -78,7 +78,7 @@ public class AccountManagementControllerImpl implements AccountManagementControl
     @Override
     public ResponseEntity<?> getCardsByUserId(UUID userId, CustomUserDetails customUserDetails) {
         List<CardResponseDto> dtoList;
-        if (isAdminRole(customUserDetails) &&
+        if (isNotAdminRole(customUserDetails) &&
                     !customUserDetails.getId().equals(userId)) throw new UnauthorizedException(userId);
         List<Card> cards = accountManagementService.findCardsByUserId(userId);
         dtoList = cardMapperService.toDtoList(cards);
@@ -98,8 +98,8 @@ public class AccountManagementControllerImpl implements AccountManagementControl
         Status cardStatus;
         Sort.Direction direction;
         Pageable pageable;
-        PagedResponseDto<CardResponseDto> responseDto;
-        if (isAdminRole(customUserDetails) &&
+        PagedResponseDto responseDto;
+        if (isNotAdminRole(customUserDetails) &&
                 !customUserDetails.getId().equals(userId)) throw new UnauthorizedException(userId);
         cardStatus = validationService.validateStatus(status);
         direction = validationService.validateSortDirection(sortDirection);
@@ -118,7 +118,7 @@ public class AccountManagementControllerImpl implements AccountManagementControl
     @Override
     public ResponseEntity<?> getBalance(UUID userId, UUID cardId, CustomUserDetails customUserDetails) {
         MoneyDto dto;
-        if (isAdminRole(customUserDetails) &&
+        if (isNotAdminRole(customUserDetails) &&
                 !customUserDetails.getId().equals(userId)) throw new UnauthorizedException(userId);
         Money money = accountManagementService.getDepositByCardId(userId, cardId);
         dto = cardMapperService.toDto(money);
@@ -128,7 +128,7 @@ public class AccountManagementControllerImpl implements AccountManagementControl
     @Override
     public ResponseEntity<?> getCardByUserId(UUID userId, UUID cardId, CustomUserDetails customUserDetails) {
         CardResponseDto dto;
-        if (isAdminRole(customUserDetails) &&
+        if (isNotAdminRole(customUserDetails) &&
                 !customUserDetails.getId().equals(userId)) throw new UnauthorizedException(userId);
         Card card = accountManagementService.findUserCard(userId, cardId);
         dto = cardMapperService.toDto(card);
@@ -137,13 +137,13 @@ public class AccountManagementControllerImpl implements AccountManagementControl
 
     @Override
     public ResponseEntity<?> requestBlockCard(UUID userId, UUID cardId, CustomUserDetails customUserDetails) {
-        if (isAdminRole(customUserDetails) &&
+        if (isNotAdminRole(customUserDetails) &&
                 !customUserDetails.getId().equals(userId)) throw new UnauthorizedException(userId);
         accountManagementService.blockRequest(userId, cardId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    private boolean isAdminRole(CustomUserDetails userDetails) {
+    private boolean isNotAdminRole(CustomUserDetails userDetails) {
         return userDetails.getAuthorities().stream()
                 .noneMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
     }

@@ -11,7 +11,7 @@ import java.util.Map;
 @Service
 public class PageMapperService {
 
-    public <T> PagedResponseDto<T> toDto(Page<CardResponseDto> page, Map<String, Object> filters) {
+    public <T> PagedResponseDto toDto(Page<CardResponseDto> page, Map<String, Object> filters) {
         return PagedResponseDto.<T>builder()
                 .data(page.getContent())
                 .hasMore(page.hasNext())
@@ -23,7 +23,7 @@ public class PageMapperService {
                 .build();
     }
 
-    public <T> PagedResponseDto<T> empty() {
+    public <T> PagedResponseDto empty() {
         return PagedResponseDto.<T>builder()
                 .data(Collections.emptyList())
                 .hasMore(false)

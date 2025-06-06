@@ -43,7 +43,7 @@ public class PageMapperServiceTest extends BankCardApplicationTests {
 
         Page<CardResponseDto> dtoPage = page.map(cardMapperService::toDto);
 
-        PagedResponseDto<CardResponseDto> responseDto = pageMapperService.toDto(dtoPage, CardSearchCriteriaDto.empty().toFilterMap());
+        PagedResponseDto responseDto = pageMapperService.toDto(dtoPage, CardSearchCriteriaDto.empty().toFilterMap());
 
         String jsonPage = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseDto);
 

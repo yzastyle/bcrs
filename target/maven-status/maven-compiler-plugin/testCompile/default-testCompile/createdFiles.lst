@@ -2,6 +2,11 @@ com/quest/bank_card/service/impl/UserManagementServiceImplTest.class
 com/quest/bank_card/containers/PostgreSQLTestContainer.class
 com/quest/bank_card/BankCardApplicationTests.class
 com/quest/bank_card/service/impl/PageMapperServiceTest.class
+com/quest/bank_card/controller/impl/AccountManagementControllerImplTest.class
+com/quest/bank_card/controller/impl/TransferControllerImplTest.class
+com/quest/bank_card/service/impl/ValidationServiceImplTest.class
 com/quest/bank_card/service/impl/AccountManagementServiceImplTest.class
 com/quest/bank_card/controller/impl/UserManagementControllerImplTest.class
+com/quest/bank_card/service/impl/TransferServiceImplTest.class
 com/quest/bank_card/service/impl/CardManagementServiceImplTest.class
+com/quest/bank_card/controller/impl/CardManagementControllerImplTest.class

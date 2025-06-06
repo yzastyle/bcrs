@@ -10,7 +10,7 @@ import java.util.Map;
 @Getter
 @Setter
 @Builder
-public class PagedResponseDto<T> {
+public class PagedResponseDto {
 
     private List<CardResponseDto> data;
 

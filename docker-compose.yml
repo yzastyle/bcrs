@@ -1,0 +1,36 @@
+services:
+    postgres-db:
+        image: postgres:latest
+        container_name: postgres_container
+        environment:
+            POSTGRES_USER: admin
+            POSTGRES_PASSWORD: 643admin643x!
+            POSTGRES_DB: bcdb
+        ports:
+            - "5432:5432"    
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        networks:
+            - my-docker-network-test
+        restart: always    
+    bank-card:
+        image: bank-card-j-17:latest
+        container_name: bank-card
+        build:
+            context: ./
+            dockerfile: Dockerfile
+        ports:
+          - "8080:8080"
+        depends_on:
+          - postgres-db
+        networks:
+          - my-docker-network-test
+        environment:
+            SPRING_PROFILES_ACTIVE: docker
+        restart: always
+volumes:
+    postgres_data:
+networks:
+    my-docker-network-test:
+                    
+        

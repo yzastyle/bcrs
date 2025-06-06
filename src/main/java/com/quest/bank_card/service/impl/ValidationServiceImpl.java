@@ -24,6 +24,7 @@ import java.util.Set;
 public class ValidationServiceImpl implements ValidationService {
 
     public static final Set<String> sortDirectionSet = Set.of("ASC", "DESC");
+    public static final int SCALE = 2;
 
     private final CardGenerationService cardGenerationService;
     private final PasswordEncoder passwordEncoder;
@@ -152,7 +153,7 @@ public class ValidationServiceImpl implements ValidationService {
     }
 
     private void checkScale(BigDecimal amount) {
-        if (amount.scale() > 2) {
+        if (amount.scale() > SCALE) {
             throw new IllegalArgumentException("Сумма не должна содержать более 2 знаков после запятой");
         }
     }

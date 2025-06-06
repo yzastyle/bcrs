@@ -1,0 +1,25 @@
+spring:
+  security:
+    enabled: true
+  datasource:
+    url: jdbc:postgresql://postgres-db:5432/bcdb
+    username: admin
+    password: 643admin643x!
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yml
+jwt:
+  secret: jajsdj0u203jd20j2dj2dj20iejd0j0dje0jd20jd20wjd20wjd20ewjd20dj20dj20dj20edj2e0dj20edj20dj20dj20jd2
+  issuer: auth-service
+  expiration: 1800
+springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+  writer:
+    file-path: docs/openapi.yml
+    format: yml
+    override: true
