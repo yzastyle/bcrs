@@ -2,7 +2,6 @@ package com.quest.bank_card.service.impl;
 
 import com.quest.bank_card.BankCardApplicationTests;
 import com.quest.bank_card.entity.Money;
-import com.quest.bank_card.exception.ExpiredStatusCardException;
 import com.quest.bank_card.exception.InsufficientFundsException;
 import com.quest.bank_card.exception.ValidationException;
 import com.quest.bank_card.service.CardManagementService;
@@ -32,7 +31,7 @@ public class TransferServiceImplTest extends BankCardApplicationTests {
     }
 
     @Test
-    public void transferBetweenUserCardTest() throws ExpiredStatusCardException {
+    public void transferBetweenUserCardTest() {
         UUID userId = UUID.fromString("11111ab1-15a3-4a5f-8f0c-1a2df111cc6a");
         UUID fromCardId = UUID.fromString("9c05a73f-38a4-0000-91bf-0047dddfb70f");
         UUID toCardId = UUID.fromString("9c05a73f-11a1-0000-91bf-0047d48fb70f");

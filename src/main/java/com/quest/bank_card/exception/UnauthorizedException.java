@@ -2,11 +2,14 @@ package com.quest.bank_card.exception;
 
 import java.util.UUID;
 
-public class UnauthorizedException extends RuntimeException {
+public class UnauthorizedException extends BaseException {
+
+    public static final String ERROR_CODE = "AUTHORIZATION_ERROR";
+
     public UnauthorizedException(UUID userId) {
-        super("User ID=" + userId + " does not belong to you");
+        super(ERROR_CODE, "Authentication error. You are not the user with id=" + userId);
     }
     public UnauthorizedException(String message) {
-        super(message);
+        super(ERROR_CODE, message);
     }
 }

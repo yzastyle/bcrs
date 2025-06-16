@@ -1,5 +1,6 @@
 package com.quest.bank_card.controller;
 
+import com.quest.bank_card.dto.ErrorResponseDto;
 import com.quest.bank_card.dto.RequestJwtDto;
 import com.quest.bank_card.dto.TokenResponseDto;
 import com.quest.bank_card.entity.User;
@@ -13,6 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 
 @RestController
@@ -29,13 +33,16 @@ public class JwtController {
         try {
             user = userManagementService.findByLoginUser(requestJwtDto.getLogin());
             if (!user.getName().equals(requestJwtDto.getName())) {
-                throw new ValidationException("The specified name does not belong to the user");
+                throw new ValidationException("The specified name=" +
+                        requestJwtDto.getName() + "does not belong to the user");
             }
             if (!passwordEncoder.matches(requestJwtDto.getPassword(), user.getPassword())) {
                 throw new ValidationException("Incorrect password");
             }
         } catch (ValidationException validationException) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validationException.getMessage());
+            ErrorResponseDto error = new ErrorResponseDto(UUID.randomUUID(), validationException.getErrorCode(),
+                    validationException.getMessage(), LocalDateTime.now());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
         return ResponseEntity.ok(new TokenResponseDto(jwtService.generateJwtToken(user)));
     }

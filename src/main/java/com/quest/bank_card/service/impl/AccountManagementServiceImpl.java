@@ -127,7 +127,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 
     private void validateBalance(Card card) {
         if (card.getDeposit().isGreaterThan(new Money(BigDecimal.ZERO))) {
-            throw new ValidationException("Cannot delete card with non-zero balance");
+            throw new ValidationException("Cannot delete card id=" + card.getId() + " with non-zero balance");
         }
     }
 }

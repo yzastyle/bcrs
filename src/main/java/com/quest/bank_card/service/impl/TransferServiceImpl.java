@@ -66,13 +66,13 @@ public class TransferServiceImpl implements TransferService {
 
     private void validateCardsOwner(UUID fromCardId, UUID toCardId, UUID userId) {
         if (!cardManagementService.isCardOwnedBy(fromCardId, userId) || !cardManagementService.isCardOwnedBy(toCardId, userId)) {
-            throw new UnauthorizedException("Card does not belong to user. Operation cancelled.");
+            throw new UnauthorizedException("Cards does not belong to user. Operation cancelled.");
         }
     }
 
     private void validateCardIds(UUID fromCardId, UUID toCardId) {
         if (fromCardId.equals(toCardId)) {
-            throw new ValidationException("The same identifiers are specified");
+            throw new ValidationException("Transfer canceled. The same card identifiers are specified");
         }
     }
 }

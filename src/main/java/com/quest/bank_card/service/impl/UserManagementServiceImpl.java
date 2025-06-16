@@ -23,7 +23,7 @@ public class UserManagementServiceImpl implements UserManagementService {
     public User saveUser(User user) {
         String login = user.getLogin();
         if (isExists(login)) {
-            throw new ValidationException("Login: " + login + " already exists");
+            throw new ValidationException("Login=" + login + " already exists");
         }
         return userRepository.save(user);
     }
