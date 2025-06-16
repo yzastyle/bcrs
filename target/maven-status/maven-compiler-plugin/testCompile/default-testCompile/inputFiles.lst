@@ -4,9 +4,10 @@
 /Users/alex/Documents/trening-test-project/bcrs/bank-card/src/test/java/com/quest/bank_card/controller/impl/CardManagementControllerImplTest.java
 /Users/alex/Documents/trening-test-project/bcrs/bank-card/src/test/java/com/quest/bank_card/controller/impl/TransferControllerImplTest.java
 /Users/alex/Documents/trening-test-project/bcrs/bank-card/src/test/java/com/quest/bank_card/controller/impl/UserManagementControllerImplTest.java
+/Users/alex/Documents/trening-test-project/bcrs/bank-card/src/test/java/com/quest/bank_card/dto/CardCreateDtoTest.java
+/Users/alex/Documents/trening-test-project/bcrs/bank-card/src/test/java/com/quest/bank_card/dto/RegistrationDtoTest.java
 /Users/alex/Documents/trening-test-project/bcrs/bank-card/src/test/java/com/quest/bank_card/service/impl/AccountManagementServiceImplTest.java
 /Users/alex/Documents/trening-test-project/bcrs/bank-card/src/test/java/com/quest/bank_card/service/impl/CardManagementServiceImplTest.java
 /Users/alex/Documents/trening-test-project/bcrs/bank-card/src/test/java/com/quest/bank_card/service/impl/PageMapperServiceTest.java
 /Users/alex/Documents/trening-test-project/bcrs/bank-card/src/test/java/com/quest/bank_card/service/impl/TransferServiceImplTest.java
 /Users/alex/Documents/trening-test-project/bcrs/bank-card/src/test/java/com/quest/bank_card/service/impl/UserManagementServiceImplTest.java
-/Users/alex/Documents/trening-test-project/bcrs/bank-card/src/test/java/com/quest/bank_card/service/impl/ValidationServiceImplTest.java

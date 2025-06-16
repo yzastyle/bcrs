@@ -1,10 +1,7 @@
 package com.quest.bank_card.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,8 +11,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
-@Data
 @Builder
+@Getter
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,5 +30,9 @@ public class User {
         this.name = name;
         this.password = password;
         this.dateCreate = LocalDateTime.now();
+    }
+
+    public void assignRole(String role) {
+        this.role = role;
     }
 }

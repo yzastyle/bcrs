@@ -1,7 +1,6 @@
 package com.quest.bank_card.service;
 
 import com.quest.bank_card.entity.Card;
-import com.quest.bank_card.model.Status;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +26,7 @@ public interface CardManagementService {
 
     Page<Card> findCardsByCriteria(Specification<Card> specification, Pageable pageable);
 
-    void UpdateCardStatusById(UUID id, Status status);
+    void UpdateCardStatusById(UUID id, String status);
 
     boolean isCardOwnedBy(UUID cardId, UUID userId);
 

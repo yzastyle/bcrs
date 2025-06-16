@@ -16,7 +16,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -28,30 +27,22 @@ import java.util.UUID;
 public class AccountManagementControllerImpl implements AccountManagementController {
 
     private final CardMapperService cardMapperService;
-    private final ValidationService validationService;
     private final AccountManagementService accountManagementService;
     private final PageMapperService pageMapperService;
+    private final CardGenerationService cardGenerationService;
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> createCard(UUID userId, @RequestBody CardCreateDto cardCreateDto) {
-        Card card;
-        CardResponseDto cardResponseDto;
-        card = validationService.validateCard(cardCreateDto);
-        card = accountManagementService.saveCard(userId, card);
-        cardResponseDto = cardMapperService.toDto(card);
-        return ResponseEntity.status(HttpStatus.CREATED).body(cardResponseDto);
+    public ResponseEntity<?> createCard(UUID userId, CardCreateDto cardCreateDto) {
+        Card card = accountManagementService.saveCard(userId, cardGenerationService.generateCard(cardCreateDto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(cardMapperService.toDto(card));
     }
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> updateCard(UUID userId, UUID cardId, @RequestBody CardCreateDto cardCreateDto) {
-        String owner;
-        CardResponseDto cardResponseDto;
-        owner = validationService.validateCard(cardCreateDto.getOwner());
-        Card card = accountManagementService.updateCard(userId, cardId, owner);
-        cardResponseDto = cardMapperService.toDto(card);
-        return ResponseEntity.ok(cardResponseDto);
+    public ResponseEntity<?> updateCard(UUID userId, UUID cardId, CardCreateDto cardCreateDto) {
+        Card card = accountManagementService.updateCard(userId, cardId, cardCreateDto.getOwner());
+        return ResponseEntity.ok(cardMapperService.toDto(card));
     }
 
     @Override
@@ -87,26 +78,16 @@ public class AccountManagementControllerImpl implements AccountManagementControl
 
     @Override
     public ResponseEntity<?> getCardsByUserIdAndCriteria(UUID userId,
-                                                         int page,
-                                                         int size,
-                                                         String status,
-                                                         String sortBy,
-                                                         String sortDirection,
+                                                         Pageable pageable,
+                                                         Status status,
                                                          LocalDateTime createdAfter,
                                                          LocalDateTime createdBefore,
                                                          CustomUserDetails customUserDetails) {
-        Status cardStatus;
-        Sort.Direction direction;
-        Pageable pageable;
         PagedResponseDto responseDto;
         if (isNotAdminRole(customUserDetails) &&
                 !customUserDetails.getId().equals(userId)) throw new UnauthorizedException(userId);
-        cardStatus = validationService.validateStatus(status);
-        direction = validationService.validateSortDirection(sortDirection);
-        Sort sort = Sort.by(direction, sortBy);
-        pageable = PageRequest.of(page, size, sort);
         CardSearchCriteriaDto criteria = CardSearchCriteriaDto.builder()
-                .status(cardStatus)
+                .status(status)
                 .createdAfter(createdAfter)
                 .createdBefore(createdBefore).build();
         Page<Card> cardPage = accountManagementService.findCardsByCriteria(userId, criteria, pageable);

@@ -4,13 +4,17 @@ import com.quest.bank_card.dto.CardCreateDto;
 import com.quest.bank_card.dto.CardResponseDto;
 import com.quest.bank_card.dto.MoneyDto;
 import com.quest.bank_card.dto.UserResponseDto;
+import com.quest.bank_card.model.Status;
 import com.quest.bank_card.security.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -36,7 +40,7 @@ public interface AccountManagementController {
             produces = { "application/json;charset=UTF-8" },
             consumes = { "application/json;charset=UTF-8" }
     )
-    ResponseEntity<?> createCard(@PathVariable UUID userId, @RequestBody CardCreateDto cardCreateDto);
+    ResponseEntity<?> createCard(@PathVariable UUID userId, @RequestBody @Valid CardCreateDto cardCreateDto);
 
     @Operation(summary = "Обновить карту пользователя", description = "Запрос на обновление карты пользователя")
     @ApiResponses(value = {
@@ -50,7 +54,7 @@ public interface AccountManagementController {
             produces = { "application/json;charset=UTF-8" },
             consumes = { "application/json;charset=UTF-8" }
     )
-    ResponseEntity<?> updateCard(@PathVariable("userId") UUID userId, @PathVariable("cardId") UUID cardId, @RequestBody CardCreateDto cardCreateDto);
+    ResponseEntity<?> updateCard(@PathVariable("userId") UUID userId, @PathVariable("cardId") UUID cardId, @RequestBody @Valid CardCreateDto cardCreateDto);
 
     @Operation(summary = "Удалить карту пользователя", description = "Удаляет карту пользователя по ID карты")
     @ApiResponses(value = {
@@ -92,8 +96,8 @@ public interface AccountManagementController {
     })
     @RequestMapping(
             method = RequestMethod.GET,
-            value = "/{userId}/cards"
-
+            value = "/{userId}/cards",
+            produces = { "application/json;charset=UTF-8" }
     )
     ResponseEntity<?> getCardsByUserId(@PathVariable UUID userId, @AuthenticationPrincipal CustomUserDetails customUserDetails);
 
@@ -105,24 +109,15 @@ public interface AccountManagementController {
     })
     @RequestMapping(
             method = RequestMethod.GET,
-            value = "/{userId}/cards/filter"
+            value = "/{userId}/cards/filter",
+            produces = { "application/json;charset=UTF-8" }
 
     )
     ResponseEntity<?> getCardsByUserIdAndCriteria(@PathVariable UUID userId,
-                                                  @RequestParam(defaultValue = "0")
-                                                  int page,
-
-                                                  @RequestParam(defaultValue = "20")
-                                                  int size,
-
-                                                  @RequestParam(required = false) String status,
-
-                                                  @RequestParam(defaultValue = "dateCreate") String sortBy,
-                                                  @RequestParam(defaultValue = "desc") String sortDirection,
-
+                                                  @Parameter(hidden = true) Pageable pageable,
+                                                  @RequestParam(required = false) Status status,
                                                   @RequestParam(required = false)
                                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime createdAfter,
-
                                                   @RequestParam(required = false)
                                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime createdBefore,
                                                   @AuthenticationPrincipal CustomUserDetails customUserDetails);
@@ -135,8 +130,8 @@ public interface AccountManagementController {
     })
     @RequestMapping(
             method = RequestMethod.GET,
-            value = "/{userId}/card/{cardId}/balance"
-
+            value = "/{userId}/card/{cardId}/balance",
+            produces = { "application/json;charset=UTF-8" }
     )
     ResponseEntity<?> getBalance(@PathVariable UUID userId, @PathVariable UUID cardId, @AuthenticationPrincipal CustomUserDetails customUserDetails);
 
@@ -148,8 +143,8 @@ public interface AccountManagementController {
     })
     @RequestMapping(
             method = RequestMethod.GET,
-            value = "/{userId}/card/{cardId}"
-
+            value = "/{userId}/card/{cardId}",
+            produces = { "application/json;charset=UTF-8" }
     )
     ResponseEntity<?> getCardByUserId(@PathVariable UUID userId, @PathVariable UUID cardId, @AuthenticationPrincipal CustomUserDetails customUserDetails);
 

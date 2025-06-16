@@ -2,7 +2,6 @@ package com.quest.bank_card.service.impl;
 
 import com.quest.bank_card.entity.Card;
 import com.quest.bank_card.exception.CardNotFoundException;
-import com.quest.bank_card.model.Status;
 import com.quest.bank_card.repository.CardRepository;
 import com.quest.bank_card.service.CardManagementService;
 import lombok.RequiredArgsConstructor;
@@ -61,12 +60,9 @@ public class CardManagementServiceImpl implements CardManagementService {
     }
 
     @Override
-    public void UpdateCardStatusById(UUID id, Status status) {
+    public void UpdateCardStatusById(UUID id, String status) {
         Card card = cardRepository.findById(id).orElseThrow(() -> new CardNotFoundException(id));
-        if (card.getStatus() == status) {
-            throw new IllegalStateException("Card is already " + status.toString());
-        }
-        card.setStatus(status);
+        card.updateStatus(status);
         cardRepository.save(card);
     }
 

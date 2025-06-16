@@ -52,10 +52,10 @@ public class CardManagementServiceImplTest extends BankCardApplicationTests {
     @Test
     public void UpdateCardTest() {
         Card card = cardManagementService.findCardById(UUID.fromString("1b52679d-1c73-46a2-95ff-0ea5756f2513"));
-        card.setOwner("new owner");
+        card.updateOwner("new owner");
         card = cardManagementService.saveCard(card);
 
-        assertEquals("new owner", card.getOwner());
+        assertEquals("NEW OWNER", card.getOwner());
     }
 
     @Test
@@ -121,7 +121,7 @@ public class CardManagementServiceImplTest extends BankCardApplicationTests {
     @Test
     public void UpdateCardStatusTest() {
         UUID cardId = UUID.fromString("1b52679d-1c73-46a2-95ff-0ea5756f2513");
-        cardManagementService.UpdateCardStatusById(cardId , Status.ACTIVE);
+        cardManagementService.UpdateCardStatusById(cardId , "ACTIVE");
 
         assertEquals(Status.ACTIVE, cardManagementService.findCardById(cardId).getStatus());
     }
@@ -129,7 +129,7 @@ public class CardManagementServiceImplTest extends BankCardApplicationTests {
     @Test
     public void UpdateSameCardStatusTest() {
         assertThrows(IllegalStateException.class,
-                () -> cardManagementService.UpdateCardStatusById(UUID.fromString("1b52679d-1c73-46a2-95ff-0ea5756f2513"), Status.EXPIRED));
+                () -> cardManagementService.UpdateCardStatusById(UUID.fromString("1b52679d-1c73-46a2-95ff-0ea5756f2513"), "EXPIRED"));
     }
 
     @Test

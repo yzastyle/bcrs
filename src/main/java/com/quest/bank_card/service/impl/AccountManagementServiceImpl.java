@@ -6,7 +6,6 @@ import com.quest.bank_card.entity.Money;
 import com.quest.bank_card.entity.User;
 import com.quest.bank_card.exception.UnauthorizedException;
 import com.quest.bank_card.exception.ValidationException;
-import com.quest.bank_card.model.Status;
 import com.quest.bank_card.repository.specification.CardSpecifications;
 import com.quest.bank_card.service.AccountManagementService;
 import com.quest.bank_card.service.CardManagementService;
@@ -27,7 +26,6 @@ public class AccountManagementServiceImpl implements AccountManagementService {
     private final UserManagementService userManagementService;
     private final CardManagementService cardManagementService;
 
-
     @Override
     public Card saveCard(UUID id, Card card) {
         User user = userManagementService.findUserById(id);
@@ -39,7 +37,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
     public Card updateCard(UUID userId, UUID cardId, String newOwner) {
         validateOwner(cardId, userId);
         Card card = cardManagementService.findCardById(cardId);
-        card.setOwner(newOwner);
+        card.updateOwner(newOwner);
         return cardManagementService.saveCard(card);
     }
 
@@ -88,7 +86,6 @@ public class AccountManagementServiceImpl implements AccountManagementService {
     public Page<Card> findCardsByCriteria(UUID userId, CardSearchCriteriaDto cardSearchCriteriaDto,
                                                            Pageable pageable) {
         Specification<Card> spec = CardSpecifications.withCriteria(userId, cardSearchCriteriaDto);
-
         return cardManagementService.findCardsByCriteria(spec, pageable);
     }
 
@@ -107,7 +104,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
     @Override
     public void blockRequest(UUID userId, UUID cardId) {
         validateOwner(cardId, userId);
-        cardManagementService.UpdateCardStatusById(cardId, Status.BLOCKED);
+        cardManagementService.UpdateCardStatusById(cardId, "BLOCKED");
     }
 
     private void validateOwner(UUID cardId, UUID userId) {

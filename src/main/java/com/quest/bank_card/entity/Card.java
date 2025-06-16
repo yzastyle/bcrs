@@ -9,11 +9,13 @@ import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static com.quest.bank_card.util.CardUtil.toUpperLatinOwnerName;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "cards")
-@Data
+@Getter
 @Builder
 public class Card {
 
@@ -29,10 +31,11 @@ public class Card {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @ToString.Exclude
+    @Setter
     private User user;
 
     @Embedded
+    @Setter
     private Money deposit;
 
     private LocalDateTime dateCreate;
@@ -46,4 +49,21 @@ public class Card {
         this.dateCreate = LocalDateTime.now();
     }
 
+    public void updateStatus(String status) {
+        status = status.toUpperCase();
+        Status cardStatus;
+        try {
+            cardStatus = Status.valueOf(status);
+        } catch (IllegalArgumentException illegalArgumentException) {
+            throw new IllegalStateException("Status: " + status + " is not exists");
+        }
+        if (this.status == cardStatus) throw new IllegalStateException("Card is already " + cardStatus);
+
+        this.status = cardStatus;
+    }
+
+    public void updateOwner(String owner) {
+        owner = toUpperLatinOwnerName(owner);
+        this.owner = owner;
+    }
 }

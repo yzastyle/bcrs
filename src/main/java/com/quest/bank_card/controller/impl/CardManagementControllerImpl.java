@@ -4,7 +4,6 @@ import com.quest.bank_card.controller.CardManagementController;
 import com.quest.bank_card.dto.CardResponseDto;
 import com.quest.bank_card.service.CardManagementService;
 import com.quest.bank_card.service.CardMapperService;
-import com.quest.bank_card.service.ValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +19,6 @@ public class CardManagementControllerImpl implements CardManagementController {
 
     private final CardManagementService cardManagementService;
     private final CardMapperService cardMapperService;
-    private final ValidationService validationService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @Override
@@ -37,7 +35,7 @@ public class CardManagementControllerImpl implements CardManagementController {
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> updateStatus(UUID id, String status) {
-        cardManagementService.UpdateCardStatusById(id, validationService.validateStatus(status));
+        cardManagementService.UpdateCardStatusById(id, status);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("The card status was successfully updated");
     }
 }

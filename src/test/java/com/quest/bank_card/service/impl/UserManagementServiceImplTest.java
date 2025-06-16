@@ -26,7 +26,7 @@ public class UserManagementServiceImplTest extends BankCardApplicationTests {
     @Test
     public void createUserTest() {
         User user = new User("login", "name", "test");
-        user.setRole("test");
+        user.assignRole("test");
         user = userManagementService.saveUser(user);
 
         assertEquals("login", user.getLogin());
@@ -36,18 +36,9 @@ public class UserManagementServiceImplTest extends BankCardApplicationTests {
     @Test
     public void createUserTestNegative() {
         User user = new User("Sash_3", "name", "test");
-        user.setRole("test");
+        user.assignRole("test");
 
         assertThrows(ValidationException.class, () -> userManagementService.saveUser(user));
-    }
-
-    @Test
-    public void updateUserTest() {
-        User user = userManagementService.findUserById(UUID.fromString("d17ba058-3684-41cc-9cdb-3ea95d0a9d6f"));
-        user.setLogin("Igor");
-        user = userManagementService.saveUser(user);
-
-        assertEquals("Igor", user.getLogin());
     }
 
     @Test

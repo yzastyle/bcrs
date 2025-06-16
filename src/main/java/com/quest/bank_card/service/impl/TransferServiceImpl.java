@@ -9,7 +9,7 @@ import com.quest.bank_card.exception.ValidationException;
 import com.quest.bank_card.model.Status;
 import com.quest.bank_card.service.CardManagementService;
 import com.quest.bank_card.service.TransferService;
-import com.quest.bank_card.util.CardExpirationUtil;
+import com.quest.bank_card.util.CardUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,8 +64,8 @@ public class TransferServiceImpl implements TransferService {
                     role + " card is expired"
             );
         }
-        if (CardExpirationUtil.isExpired(card.getExpirationDate())) {
-            cardManagementService.UpdateCardStatusById(card.getId(), Status.EXPIRED);
+        if (CardUtil.isExpired(card.getExpirationDate())) {
+            cardManagementService.UpdateCardStatusById(card.getId(), "EXPIRED");
             throw new ExpiredStatusCardException(role + " card is expired");
         }
         if (card.getStatus() != Status.ACTIVE) {

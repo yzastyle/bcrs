@@ -1,13 +1,20 @@
 package com.quest.bank_card.service.impl;
 
+import com.quest.bank_card.dto.CardCreateDto;
+import com.quest.bank_card.entity.Card;
+import com.quest.bank_card.entity.Money;
+import com.quest.bank_card.model.Status;
 import com.quest.bank_card.repository.CardRepository;
 import com.quest.bank_card.service.CardGenerationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
+import static com.quest.bank_card.util.CardUtil.toUpperLatinOwnerName;
 
 @Service
 @RequiredArgsConstructor
@@ -17,8 +24,15 @@ public class CardGenerationServiceImpl implements CardGenerationService {
     private static final SecureRandom random = new SecureRandom();
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("MM/yy");
 
-    @Override
-    public String generateUniqueCardNumber() {
+    public Card generateCard(CardCreateDto cardCreateDto) {
+        String ownerName = toUpperLatinOwnerName(cardCreateDto.getOwner());
+        String cardNumber = generateUniqueCardNumber();
+        String expirationDate = generateExpirationDate();
+
+        return new Card(cardNumber, ownerName, expirationDate, Status.ACTIVE, new Money(new BigDecimal("0")));
+    }
+
+    private String generateUniqueCardNumber() {
         String cardNumber;
         int attempts = 0;
         int maxAttempts = 100;
@@ -35,8 +49,7 @@ public class CardGenerationServiceImpl implements CardGenerationService {
         return cardNumber;
     }
 
-    @Override
-    public String generateExpirationDate() {
+    private String generateExpirationDate() {
         LocalDate expirationDate = LocalDate.now().plusYears(4);
         return expirationDate.format(DATE_FORMATTER);
     }
