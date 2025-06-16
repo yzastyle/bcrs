@@ -23,15 +23,6 @@ public class TransferServiceImplTest extends BankCardApplicationTests {
     CardManagementService cardManagementService;
 
     @Test
-    public void transferBetweenUserCardTest_ExpiredStatus() {
-        UUID userId = UUID.fromString("11111ab1-15a3-4a5f-8f0c-23456111cc6a");
-        UUID fromCardId = UUID.fromString("f909df0e-8ca5-4f09-8bc0-43540de2f3ea");
-        UUID toCardId = UUID.fromString("9ee5ca3b-c707-4a33-97c9-d42aabaf4959");
-
-        assertThrows(ExpiredStatusCardException.class, () -> transferService.transferBetweenUserCards(fromCardId, toCardId, userId, new Money(new BigDecimal("1000.00"))));
-    }
-
-    @Test
     public void transferBetweenUserCardTest_invalidStatus() {
         UUID userId = UUID.fromString("d17ba058-3684-41cc-9cdb-3ea95d0a9d6f");
         UUID fromCardId = UUID.fromString("ff8d0496-46d7-4264-8570-df21b68ed5ff");

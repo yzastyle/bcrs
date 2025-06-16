@@ -2,14 +2,12 @@ package com.quest.bank_card.service.impl;
 
 import com.quest.bank_card.entity.Card;
 import com.quest.bank_card.entity.Money;
-import com.quest.bank_card.exception.ExpiredStatusCardException;
 import com.quest.bank_card.exception.InsufficientFundsException;
 import com.quest.bank_card.exception.UnauthorizedException;
 import com.quest.bank_card.exception.ValidationException;
 import com.quest.bank_card.model.Status;
 import com.quest.bank_card.service.CardManagementService;
 import com.quest.bank_card.service.TransferService;
-import com.quest.bank_card.util.CardUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,13 +22,13 @@ public class TransferServiceImpl implements TransferService {
 
     @Override
     @Transactional
-    public void transferBetweenUserCards(UUID fromCardId, UUID toCardId, UUID userId, Money amount) throws ExpiredStatusCardException {
-        validateCardIds(fromCardId, toCardId);
-        validateCardsOwner(fromCardId, toCardId, userId);
+    public void transferBetweenUserCards(UUID fromCardId, UUID toCardId, UUID userId, Money amount) {
+        validateTransfer(fromCardId, toCardId, userId);
 
         Card from = cardManagementService.findCardById(fromCardId);
         Card to = cardManagementService.findCardById(toCardId);
-        validateCards(from, to, amount);
+
+        validateAvailableDeposit(from, amount);
 
         Money newFromDeposit = from.getDeposit().subtract(amount);
         Money newToDeposit = to.getDeposit().add(amount);
@@ -42,14 +40,16 @@ public class TransferServiceImpl implements TransferService {
         cardManagementService.saveCard(to);
     }
 
-    private void validateCards(Card from, Card to, Money amount) throws ExpiredStatusCardException {
-        validateCardStatus(from, "Source");
+    private void validateTransfer(UUID fromCardId, UUID toCardId, UUID userId) {
+        validateCardIds(fromCardId, toCardId);
+        validateCardsOwner(fromCardId, toCardId, userId);
+        validateCardStatus(fromCardId);
+        validateCardStatus(toCardId);
+    }
 
-        validateCardStatus(to, "Destination");
-
+    private void validateAvailableDeposit(Card from, Money amount) {
         if (from.getDeposit().isLessThan(amount)) {
-            throw new InsufficientFundsException(
-                    "Insufficient funds. Available: "
+            throw new InsufficientFundsException("Insufficient funds. Available: "
                             + from.getDeposit().getAmount()
                             + ", Required: "
                             + amount.getAmount()
@@ -57,21 +57,10 @@ public class TransferServiceImpl implements TransferService {
         }
     }
 
-
-    private void validateCardStatus(Card card, String role) throws ExpiredStatusCardException {
-        if (card.getStatus() == Status.EXPIRED) {
-            throw new IllegalStateException(
-                    role + " card is expired"
-            );
-        }
-        if (CardUtil.isExpired(card.getExpirationDate())) {
-            cardManagementService.UpdateCardStatusById(card.getId(), "EXPIRED");
-            throw new ExpiredStatusCardException(role + " card is expired");
-        }
+    private void validateCardStatus(UUID cardId) {
+        Card card = cardManagementService.findCardById(cardId);
         if (card.getStatus() != Status.ACTIVE) {
-            throw new IllegalStateException(
-                    role + " card is not active: " + card.getStatus()
-            );
+            throw new IllegalStateException("Card is not active: " + card.getStatus());
         }
     }
 

@@ -26,9 +26,11 @@ public interface CardManagementService {
 
     Page<Card> findCardsByCriteria(Specification<Card> specification, Pageable pageable);
 
-    void UpdateCardStatusById(UUID id, String status);
+    void updateCardStatusById(UUID id, String status);
 
     boolean isCardOwnedBy(UUID cardId, UUID userId);
 
     List<Card> findByUserId(UUID id);
+
+    public void validateAndUpdateExpiredCard(UUID cardId);
 }

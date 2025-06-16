@@ -3,6 +3,7 @@ package com.quest.bank_card.repository;
 import com.quest.bank_card.entity.Card;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,4 +17,7 @@ public interface CardRepository extends JpaRepository<Card, UUID>, JpaSpecificat
     boolean existsByIdAndUserId(UUID cardId, UUID userId);
 
     boolean existsByNumber(String number);
+
+    @Query("SELECT c FROM Card c JOIN FETCH c.user")
+    List<Card> findAllWithUsers();
 }

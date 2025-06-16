@@ -35,7 +35,7 @@ public class CardManagementControllerImpl implements CardManagementController {
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> updateStatus(UUID id, String status) {
-        cardManagementService.UpdateCardStatusById(id, status);
+        cardManagementService.updateCardStatusById(id, status);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("The card status was successfully updated");
     }
 }

@@ -8,6 +8,15 @@ spring:
     driver-class-name: org.postgresql.Driver
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yml
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 jwt:
   secret: jajsdj0u203jd20j2dj2dj20iejd0j0dje0jd20jd20wjd20wjd20ewjd20dj20dj20dj20edj2e0dj20edj20dj20dj20jd2
   issuer: auth-service

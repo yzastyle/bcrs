@@ -141,7 +141,7 @@ class CardManagementControllerImplTest {
 //    @Test
 //    void updateStatusTest() throws Exception {
 //        when(validationService.validateStatus("active")).thenReturn(Status.ACTIVE);
-//        doNothing().when(cardManagementService).UpdateCardStatusById(testCardId1, Status.ACTIVE);
+//        doNothing().when(cardManagementService).updateCardStatusById(testCardId1, Status.ACTIVE);
 //
 //        mockMvc.perform(patch("/api/v1/cards/{id}/{status}", testCardId1, "active"))
 //                .andDo(print())
@@ -149,7 +149,7 @@ class CardManagementControllerImplTest {
 //                .andExpect(content().string("The card status was successfully updated"));
 //
 //        verify(validationService, times(1)).validateStatus("active");
-//        verify(cardManagementService, times(1)).UpdateCardStatusById(testCardId1, Status.ACTIVE);
+//        verify(cardManagementService, times(1)).updateCardStatusById(testCardId1, Status.ACTIVE);
 //    }
 
 //    @Test
@@ -159,13 +159,13 @@ class CardManagementControllerImplTest {
 //                .andExpect(status().isBadRequest());
 //
 //        verify(validationService, never()).validateStatus(any());
-//        verify(cardManagementService, never()).UpdateCardStatusById(any(UUID.class), any());
+//        verify(cardManagementService, never()).updateCardStatusById(any(UUID.class), any());
 //    }
 
 //    @Test
 //    void updateStatusTest_BlockStatus() throws Exception {
 //        when(validationService.validateStatus("blocked")).thenReturn(Status.BLOCKED);
-//        doNothing().when(cardManagementService).UpdateCardStatusById(testCardId1, Status.BLOCKED);
+//        doNothing().when(cardManagementService).updateCardStatusById(testCardId1, Status.BLOCKED);
 //
 //        mockMvc.perform(patch("/api/v1/cards/{id}/{status}", testCardId1, "blocked"))
 //                .andDo(print())
@@ -173,6 +173,6 @@ class CardManagementControllerImplTest {
 //                .andExpect(content().string("The card status was successfully updated"));
 //
 //        verify(validationService, times(1)).validateStatus("blocked");
-//        verify(cardManagementService, times(1)).UpdateCardStatusById(testCardId1, Status.BLOCKED);
+//        verify(cardManagementService, times(1)).updateCardStatusById(testCardId1, Status.BLOCKED);
 //    }
 }

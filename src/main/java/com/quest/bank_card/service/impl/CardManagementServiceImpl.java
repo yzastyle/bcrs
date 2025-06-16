@@ -2,13 +2,16 @@ package com.quest.bank_card.service.impl;
 
 import com.quest.bank_card.entity.Card;
 import com.quest.bank_card.exception.CardNotFoundException;
+import com.quest.bank_card.model.Status;
 import com.quest.bank_card.repository.CardRepository;
 import com.quest.bank_card.service.CardManagementService;
+import com.quest.bank_card.util.CardUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -51,7 +54,7 @@ public class CardManagementServiceImpl implements CardManagementService {
 
     @Override
     public List<Card> findAllCards() {
-        return cardRepository.findAll();
+        return cardRepository.findAllWithUsers();
     }
 
     @Override
@@ -59,9 +62,10 @@ public class CardManagementServiceImpl implements CardManagementService {
         return cardRepository.findAll(specification, pageable);
     }
 
+    @Transactional
     @Override
-    public void UpdateCardStatusById(UUID id, String status) {
-        Card card = cardRepository.findById(id).orElseThrow(() -> new CardNotFoundException(id));
+    public void updateCardStatusById(UUID cardId, String status) {
+        Card card = cardRepository.findById(cardId).orElseThrow(() -> new CardNotFoundException(cardId));
         card.updateStatus(status);
         cardRepository.save(card);
     }
@@ -74,5 +78,15 @@ public class CardManagementServiceImpl implements CardManagementService {
     @Override
     public List<Card> findByUserId(UUID id) {
         return cardRepository.findByUserId(id);
+    }
+
+    @Transactional
+    @Override
+    public void validateAndUpdateExpiredCard(UUID cardId) {
+        Card card = cardRepository.findById(cardId).orElseThrow(() -> new CardNotFoundException(cardId));
+        if (CardUtil.isExpired(card.getExpirationDate()) && card.getStatus() != Status.EXPIRED) {
+            card.updateStatus(String.valueOf(Status.EXPIRED));
+            cardRepository.save(card);
+        }
     }
 }

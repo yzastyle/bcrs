@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -26,6 +27,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
     private final UserManagementService userManagementService;
     private final CardManagementService cardManagementService;
 
+    @Transactional
     @Override
     public Card saveCard(UUID id, Card card) {
         User user = userManagementService.findUserById(id);
@@ -33,6 +35,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
         return cardManagementService.saveCard(card);
     }
 
+    @Transactional
     @Override
     public Card updateCard(UUID userId, UUID cardId, String newOwner) {
         validateOwner(cardId, userId);
@@ -41,6 +44,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
         return cardManagementService.saveCard(card);
     }
 
+    @Transactional
     @Override
     public List<Card> saveCards(UUID id, List<Card> cards) {
         User user = userManagementService.findUserById(id);
@@ -50,6 +54,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
         return cardManagementService.saveAllCards(cards);
     }
 
+    @Transactional
     @Override
     public void deleteCardById(UUID userId, UUID cardId) {
         validateOwner(cardId, userId);
@@ -58,6 +63,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
         cardManagementService.deleteCardById(cardId);
     }
 
+    @Transactional
     @Override
     public void deleteCardsByIds(UUID userId, List<UUID> cardsIds) {
         List<Card> cards = cardManagementService.findAllByIds(cardsIds);
@@ -68,6 +74,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
         cardManagementService.deleteCardsByIds(cardsIds);
     }
 
+    @Transactional
     @Override
     public void deleteCardsByUserId(UUID userId) {
         List<Card> cards = cardManagementService.findByUserId(userId);
@@ -104,7 +111,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
     @Override
     public void blockRequest(UUID userId, UUID cardId) {
         validateOwner(cardId, userId);
-        cardManagementService.UpdateCardStatusById(cardId, "BLOCKED");
+        cardManagementService.updateCardStatusById(cardId, "BLOCKED");
     }
 
     private void validateOwner(UUID cardId, UUID userId) {
@@ -113,7 +120,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
         }
     }
 
-    private static void validateBalance(Card card) {
+    private void validateBalance(Card card) {
         if (card.getDeposit().isGreaterThan(new Money(BigDecimal.ZERO))) {
             throw new ValidationException("Cannot delete card with non-zero balance");
         }
