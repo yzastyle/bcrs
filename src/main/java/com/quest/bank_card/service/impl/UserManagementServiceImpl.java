@@ -18,6 +18,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 
     private final UserRepository userRepository;
 
+    @Transactional
     @Override
     public User saveUser(User user) {
         String login = user.getLogin();
@@ -37,26 +38,31 @@ public class UserManagementServiceImpl implements UserManagementService {
         userRepository.deleteAllById(ids);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public User findUserById(UUID id) throws UserNotFoundException {
        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<User> findAllUsers() {
         return userRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public boolean isExists(String login) {
         return userRepository.existsByLogin(login);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public boolean isFirstUser() {
         return userRepository.count() == 0;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public User findByLoginUser(String login) {
         return userRepository.findByLogin(login).orElseThrow(() -> new UserNotFoundException(login));

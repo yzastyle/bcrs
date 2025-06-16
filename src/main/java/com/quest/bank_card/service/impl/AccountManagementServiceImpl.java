@@ -85,10 +85,12 @@ public class AccountManagementServiceImpl implements AccountManagementService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Card> findCardsByUserId(UUID userId) {
         return cardManagementService.findByUserId(userId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Page<Card> findCardsByCriteria(UUID userId, CardSearchCriteriaDto cardSearchCriteriaDto,
                                                            Pageable pageable) {
@@ -96,6 +98,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
         return cardManagementService.findCardsByCriteria(spec, pageable);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Card findUserCard(UUID userId, UUID cardId) {
         validateOwner(cardId, userId);
@@ -103,12 +106,14 @@ public class AccountManagementServiceImpl implements AccountManagementService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Money getDepositByCardId(UUID userId, UUID cardId) {
         validateOwner(cardId, userId);
         return cardManagementService.findCardById(cardId).getDeposit();
     }
 
     @Override
+    @Transactional
     public void blockRequest(UUID userId, UUID cardId) {
         validateOwner(cardId, userId);
         cardManagementService.updateCardStatusById(cardId, "BLOCKED");

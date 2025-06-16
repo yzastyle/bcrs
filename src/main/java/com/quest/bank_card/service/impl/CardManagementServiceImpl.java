@@ -47,12 +47,14 @@ public class CardManagementServiceImpl implements CardManagementService {
         return cardRepository.findAllById(ids);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Card findCardById(UUID id) {
         return cardRepository.findById(id).orElseThrow(() -> new CardNotFoundException(id));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Card> findAllCards() {
         return cardRepository.findAllWithUsers();
     }
