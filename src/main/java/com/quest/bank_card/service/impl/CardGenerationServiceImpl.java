@@ -3,10 +3,12 @@ package com.quest.bank_card.service.impl;
 import com.quest.bank_card.dto.CardCreateDto;
 import com.quest.bank_card.entity.Card;
 import com.quest.bank_card.entity.Money;
+import com.quest.bank_card.exception.BaseException;
 import com.quest.bank_card.model.Status;
 import com.quest.bank_card.repository.CardRepository;
 import com.quest.bank_card.service.CardGenerationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -42,7 +44,8 @@ public class CardGenerationServiceImpl implements CardGenerationService {
             attempts++;
 
             if (attempts >= maxAttempts) {
-                throw new RuntimeException("Unable to generate unique card number");
+                throw new BaseException("Unable to generate unique card number", HttpStatus.BAD_REQUEST) {
+                };
             }
         } while (cardRepository.existsByNumber(cardNumber));
 

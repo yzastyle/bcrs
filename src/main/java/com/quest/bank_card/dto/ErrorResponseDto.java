@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.UUID;
 
 @Getter
@@ -13,5 +14,6 @@ public class ErrorResponseDto {
     private final String errorCode;
     private final String message;
     private final LocalDateTime timestamp;
-    //details
+    private final Map<String, Object> details;
+    private final int statusCode;
 }

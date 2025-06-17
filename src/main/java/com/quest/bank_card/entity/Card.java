@@ -1,5 +1,6 @@
 package com.quest.bank_card.entity;
 
+import com.quest.bank_card.exception.ValidationException;
 import com.quest.bank_card.model.Status;
 import jakarta.persistence.*;
 import lombok.*;
@@ -54,10 +55,10 @@ public class Card {
         Status cardStatus;
         try {
             cardStatus = Status.valueOf(status);
-        } catch (IllegalArgumentException illegalArgumentException) {
-            throw new IllegalStateException("Status: " + status + " is not exists");
+        } catch (ValidationException validationException) {
+            throw new ValidationException("Status: " + status + " is not exists");
         }
-        if (this.status == cardStatus) throw new IllegalStateException("Card is already " + cardStatus);
+        if (this.status == cardStatus) throw new ValidationException("Card is already " + cardStatus);
 
         this.status = cardStatus;
     }

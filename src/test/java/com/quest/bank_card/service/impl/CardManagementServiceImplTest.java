@@ -6,6 +6,7 @@ import com.quest.bank_card.entity.Card;
 import com.quest.bank_card.entity.Money;
 import com.quest.bank_card.entity.User;
 import com.quest.bank_card.exception.CardNotFoundException;
+import com.quest.bank_card.exception.ValidationException;
 import com.quest.bank_card.model.Status;
 import com.quest.bank_card.repository.UserRepository;
 import com.quest.bank_card.repository.specification.CardSpecifications;
@@ -128,7 +129,7 @@ public class CardManagementServiceImplTest extends BankCardApplicationTests {
 
     @Test
     public void UpdateSameCardStatusTest() {
-        assertThrows(IllegalStateException.class,
+        assertThrows(ValidationException.class,
                 () -> cardManagementService.updateCardStatusById(UUID.fromString("1b52679d-1c73-46a2-95ff-0ea5756f2513"), "EXPIRED"));
     }
 
