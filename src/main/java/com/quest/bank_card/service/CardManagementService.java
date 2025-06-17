@@ -22,6 +22,8 @@ public interface CardManagementService {
 
     Card findCardById(UUID id);
 
+    Card findByIdWithLock(UUID id);
+
     List<Card> findAllCards();
 
     Page<Card> findCardsByCriteria(Specification<Card> specification, Pageable pageable);

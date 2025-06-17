@@ -54,6 +54,11 @@ public class CardManagementServiceImpl implements CardManagementService {
     }
 
     @Override
+    public Card findByIdWithLock(UUID id) {
+        return cardRepository.findByIdWithLock(id);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<Card> findAllCards() {
         return cardRepository.findAllWithUsers();

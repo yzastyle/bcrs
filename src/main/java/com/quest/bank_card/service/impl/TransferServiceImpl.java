@@ -23,11 +23,10 @@ public class TransferServiceImpl implements TransferService {
     @Override
     @Transactional
     public void transferBetweenUserCards(UUID fromCardId, UUID toCardId, UUID userId, Money amount) {
-        validateTransfer(fromCardId, toCardId, userId);
+        Card from = cardManagementService.findByIdWithLock(fromCardId);
+        Card to = cardManagementService.findByIdWithLock(toCardId);
 
-        Card from = cardManagementService.findCardById(fromCardId);
-        Card to = cardManagementService.findCardById(toCardId);
-
+        validateTransfer(from, to, userId);
         validateAvailableDeposit(from, amount);
 
         Money newFromDeposit = from.getDeposit().subtract(amount);
@@ -40,11 +39,11 @@ public class TransferServiceImpl implements TransferService {
         cardManagementService.saveCard(to);
     }
 
-    private void validateTransfer(UUID fromCardId, UUID toCardId, UUID userId) {
-        validateCardIds(fromCardId, toCardId);
-        validateCardsOwner(fromCardId, toCardId, userId);
-        validateCardStatus(fromCardId);
-        validateCardStatus(toCardId);
+    private void validateTransfer(Card from, Card to, UUID userId) {
+        validateCardIds(from.getId(), to.getId());
+        validateCardsOwner(from.getId(), to.getId(), userId);
+        validateCardStatus(from);
+        validateCardStatus(to);
     }
 
     private void validateAvailableDeposit(Card from, Money amount) {
@@ -57,8 +56,7 @@ public class TransferServiceImpl implements TransferService {
         }
     }
 
-    private void validateCardStatus(UUID cardId) {
-        Card card = cardManagementService.findCardById(cardId);
+    private void validateCardStatus(Card card) {
         if (card.getStatus() != Status.ACTIVE) {
             throw new IllegalStateException("Card is not active: " + card.getStatus());
         }
