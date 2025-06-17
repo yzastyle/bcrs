@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -16,6 +15,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 @EnableMethodSecurity
@@ -37,7 +37,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
                                                    JwtDecoder jwtDecoder,
                                                    Converter<Jwt, AbstractAuthenticationToken> jwtConverter,
-                                                   BearerTokenResolver bearerTokenResolver) throws Exception {
+                                                   BearerTokenResolver bearerTokenResolver,
+                                                   CorsConfigurationSource corsConfigurationSource) throws Exception {
         if (Boolean.FALSE.equals(securityEnabled)) {
             return http
                     .csrf(AbstractHttpConfigurer::disable)
@@ -45,7 +46,7 @@ public class SecurityConfig {
                     .build();
         }
         return http.csrf(AbstractHttpConfigurer::disable)
-                .cors(Customizer.withDefaults())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .authorizeHttpRequests(httpRequest ->
                         httpRequest.requestMatchers(PUBLIC_PATHS).permitAll()
                                 .anyRequest().authenticated())
