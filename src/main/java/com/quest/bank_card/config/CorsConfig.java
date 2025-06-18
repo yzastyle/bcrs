@@ -26,9 +26,6 @@ public class CorsConfig {
                 "Content-Type",
                 "Accept"
         ));
-        configuration.setExposedHeaders(Arrays.asList(
-                "Authorization"
-        ));
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
 
