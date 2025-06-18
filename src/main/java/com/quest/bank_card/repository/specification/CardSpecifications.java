@@ -8,6 +8,12 @@ import org.springframework.data.jpa.domain.Specification;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Utility class for building dynamic JPA Specification queries for Card entities.
+ * <p>
+ * All methods handle null input gracefully by returning {@code conjunction()}
+ * (always-true predicate) to avoid filtering when criteria is not specified.
+ */
 public class CardSpecifications {
 
     public static Specification<Card> belongsToUser(UUID userId) {
@@ -42,6 +48,10 @@ public class CardSpecifications {
 
     }
 
+    /**
+     * Combines all search criteria into a single Specification with user ownership constraint.
+     * All null criteria are ignored, resulting in no filtering for those fields.
+     */
     public static Specification<Card> withCriteria(UUID userId, CardSearchCriteriaDto cardSearchCriteria) {
         return belongsToUser(userId)
                 .and(hasStatus(cardSearchCriteria.getStatus()))

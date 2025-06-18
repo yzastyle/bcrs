@@ -1,7 +1,6 @@
 package com.quest.bank_card.controller;
 
 import com.quest.bank_card.dto.CardResponseDto;
-import com.quest.bank_card.dto.UserResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

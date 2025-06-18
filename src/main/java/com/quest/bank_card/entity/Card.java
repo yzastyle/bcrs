@@ -38,7 +38,6 @@ public class Card {
     @Embedded
     @Setter
     private Money deposit;
-
     private LocalDateTime dateCreate;
 
     public Card(String number, String owner, String expirationDate, Status status, Money deposit) {

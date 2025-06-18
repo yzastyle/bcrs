@@ -3,7 +3,6 @@ package com.quest.bank_card.controller;
 import com.quest.bank_card.dto.CardCreateDto;
 import com.quest.bank_card.dto.CardResponseDto;
 import com.quest.bank_card.dto.MoneyDto;
-import com.quest.bank_card.dto.UserResponseDto;
 import com.quest.bank_card.model.Status;
 import com.quest.bank_card.security.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;

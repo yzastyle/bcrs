@@ -27,7 +27,7 @@ public class TransferServiceImplTest extends BankCardApplicationTests {
         UUID fromCardId = UUID.fromString("ff8d0496-46d7-4264-8570-df21b68ed5ff");
         UUID toCardId = UUID.fromString("1b52679d-1c73-46a2-95ff-0ea5756f2513");
 
-        assertThrows(IllegalStateException.class, () -> transferService.transferBetweenUserCards(fromCardId, toCardId, userId, new Money(new BigDecimal("1000.00"))));
+        assertThrows(ValidationException.class, () -> transferService.transferBetweenUserCards(fromCardId, toCardId, userId, new Money(new BigDecimal("1000.00"))));
     }
 
     @Test

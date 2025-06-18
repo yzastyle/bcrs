@@ -22,6 +22,7 @@ public class User {
     private String password;
     private String role;
     private LocalDateTime dateCreate;
+
     @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     private List<Card> cards;
 

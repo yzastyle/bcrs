@@ -86,7 +86,7 @@ public class UserManagementServiceImplTest extends BankCardApplicationTests {
     @Test
     public void findUserByLoginTest() {
         String login = "new bob";
-        User user = userManagementService.findByLoginUser(login);
+        User user = userManagementService.findUserByLogin(login);
 
         assertNotNull(user);
         assertNotNull(user.getId());

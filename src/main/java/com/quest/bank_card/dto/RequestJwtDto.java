@@ -9,7 +9,6 @@ import lombok.Getter;
 @Schema(description = "Данные для генерации jwt для зарегистрированного пользователя")
 public class RequestJwtDto {
 
-
     @Schema(description = "Логин пользователя", example = "ivan_petrov", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank(message = "Owner information must not be blank")
     @Size(min = 2, max = 50, message = "Owner information must be between at 2 or 50 characters long")

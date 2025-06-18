@@ -172,6 +172,53 @@
 					<outputDir>${project.basedir}/docs</outputDir>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<show>protected</show>
+					<author>true</author>
+					<version>true</version>
+					<use>true</use>
+					<doctitle>Bank Card System API 0.0.1</doctitle>
+					<bottom>Copyright © 2024 Your Company. All rights reserved.</bottom>
+					<encoding>UTF-8</encoding>
+					<charset>UTF-8</charset>
+					<docencoding>UTF-8</docencoding>
+					<additionalJOption>-Xdoclint:none</additionalJOption>
+					<groups>
+						<group>
+							<title>Controllers</title>
+							<packages>com.quest.bank_card.controller*</packages>
+						</group>
+						<group>
+							<title>Services</title>
+							<packages>com.quest.bank_card.service*</packages>
+						</group>
+						<group>
+							<title>Models &amp; DTOs</title>
+							<packages>com.quest.bank_card.model*:com.quest.bank_card.dto*</packages>
+						</group>
+						<group>
+							<title>Utils</title>
+							<packages>com.quest.bank_card.util*</packages>
+						</group>
+					</groups>
+					<links>
+						<link>https://docs.oracle.com/en/java/javase/17/docs/api/</link>
+						<link>https://docs.spring.io/spring-framework/docs/current/javadoc-api/</link>
+						<link>https://docs.spring.io/spring-boot/docs/current/api/</link>
+					</links>
+				</configuration>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 </project>

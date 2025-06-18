@@ -54,8 +54,8 @@ public class CardManagementServiceImpl implements CardManagementService {
     }
 
     @Override
-    public Card findByIdWithLock(UUID id) {
-        return cardRepository.findByIdWithLock(id);
+    public Card findCardByIdWithLock(UUID id) {
+        return cardRepository.findByIdWithLock(id).orElseThrow(() -> new CardNotFoundException(id));
     }
 
     @Override
@@ -83,7 +83,7 @@ public class CardManagementServiceImpl implements CardManagementService {
     }
 
     @Override
-    public List<Card> findByUserId(UUID id) {
+    public List<Card> findCardByUserId(UUID id) {
         return cardRepository.findByUserId(id);
     }
 

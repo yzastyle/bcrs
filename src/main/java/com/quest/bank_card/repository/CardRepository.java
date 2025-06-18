@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface CardRepository extends JpaRepository<Card, UUID>, JpaSpecificationExecutor<Card> {
@@ -24,5 +25,5 @@ public interface CardRepository extends JpaRepository<Card, UUID>, JpaSpecificat
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("Select c From Card c where c.id = :id")
-    Card findByIdWithLock(@Param("id") UUID id);
+    Optional<Card> findByIdWithLock(@Param("id") UUID id);
 }

@@ -23,8 +23,8 @@ public class TransferServiceImpl implements TransferService {
     @Override
     @Transactional
     public void transferBetweenUserCards(UUID fromCardId, UUID toCardId, UUID userId, Money amount) {
-        Card from = cardManagementService.findByIdWithLock(fromCardId);
-        Card to = cardManagementService.findByIdWithLock(toCardId);
+        Card from = cardManagementService.findCardByIdWithLock(fromCardId);
+        Card to = cardManagementService.findCardByIdWithLock(toCardId);
 
         validateTransfer(from, to, userId);
         validateAvailableDeposit(from, amount);
@@ -58,7 +58,7 @@ public class TransferServiceImpl implements TransferService {
 
     private void validateCardStatus(Card card) {
         if (card.getStatus() != Status.ACTIVE) {
-            throw new IllegalStateException("Card is not active: " + card.getStatus());
+            throw new ValidationException("Card is not active: " + card.getStatus());
         }
     }
 

@@ -64,7 +64,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 
     @Transactional(readOnly = true)
     @Override
-    public User findByLoginUser(String login) {
+    public User findUserByLogin(String login) {
         return userRepository.findByLogin(login).orElseThrow(() -> new UserNotFoundException(login));
     }
 }

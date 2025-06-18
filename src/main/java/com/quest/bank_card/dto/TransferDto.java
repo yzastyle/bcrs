@@ -14,6 +14,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class TransferDto {
+
     private UUID toCardId;
     private UUID fromCardId;
 

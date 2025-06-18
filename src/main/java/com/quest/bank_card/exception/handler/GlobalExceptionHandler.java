@@ -18,6 +18,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Centralized exception handling for all REST API endpoints.
+ * <p>
+ * Provides consistent error response format across the application using
+ * {@link ErrorResponseDto}.
+ * All unhandled exceptions are caught by the fallback handler to prevent
+ * exposure of internal system details.
+ */
 @ControllerAdvice
 @Hidden
 public class GlobalExceptionHandler {
@@ -33,12 +41,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(ex.getHttpStatus()).body(error);
     }
 
+        /**
+     * Handles Spring validation errors by extracting field-level error details.
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponseDto> handleArgumentValidationException(MethodArgumentNotValidException ex) {
         Map<String, Object> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach(e -> {
             String fieldName = ((FieldError) e).getField();
-            Object errorMessage = ((FieldError) e).getDefaultMessage();
+            Object errorMessage =  e.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
 
@@ -84,6 +95,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
     }
 
+    /**
+     * Fallback handler for all unhandled exceptions to prevent exposure
+     * of internal system details while maintaining consistent error format.
+     */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDto> handleGeneral(Exception ex) {
         ErrorResponseDto error = new ErrorResponseDto(UUID.randomUUID(),
