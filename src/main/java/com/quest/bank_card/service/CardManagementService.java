@@ -33,7 +33,7 @@ public interface CardManagementService {
 
     void deleteCardsByIds(List<UUID> ids);
 
-    List<Card> findAllByIds(List<UUID> ids);
+    List<Card> findAllCardsByIds(List<UUID> ids);
 
     Card findCardById(UUID id);
 
@@ -84,7 +84,7 @@ public interface CardManagementService {
 
     boolean isCardOwnedBy(UUID cardId, UUID userId);
 
-    List<Card> findCardByUserId(UUID id);
+    List<Card> findCardsByUserId(UUID id);
 
     /**
      * Validates card expiration and automatically updates status if needed.

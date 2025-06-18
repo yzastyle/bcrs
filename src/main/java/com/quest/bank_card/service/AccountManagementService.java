@@ -52,7 +52,7 @@ public interface AccountManagementService {
      * @return the saved card with generated system fields (create date timestamp, ID)
      * @throws UserNotFoundException if user with specified ID does not exist
      */
-    Card saveCard(UUID id, Card card);
+    Card saveCard(UUID userId, Card card);
 
     /**
      * Updates the owner name of an existing card.

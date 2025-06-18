@@ -29,8 +29,8 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 
     @Transactional
     @Override
-    public Card saveCard(UUID id, Card card) {
-        User user = userManagementService.findUserById(id);
+    public Card saveCard(UUID userId, Card card) {
+        User user = userManagementService.findUserById(userId);
         card.setUser(user);
         return cardManagementService.saveCard(card);
     }
@@ -66,7 +66,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
     @Transactional
     @Override
     public void deleteCardsByIds(UUID userId, List<UUID> cardsIds) {
-        List<Card> cards = cardManagementService.findAllByIds(cardsIds);
+        List<Card> cards = cardManagementService.findAllCardsByIds(cardsIds);
         for (Card card : cards) {
             validateOwner(card.getId(), userId);
             validateBalance(card);
@@ -77,7 +77,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
     @Transactional
     @Override
     public void deleteCardsByUserId(UUID userId) {
-        List<Card> cards = cardManagementService.findCardByUserId(userId);
+        List<Card> cards = cardManagementService.findCardsByUserId(userId);
         for (Card card : cards) {
             validateBalance(card);
         }
@@ -87,7 +87,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
     @Override
     @Transactional(readOnly = true)
     public List<Card> findCardsByUserId(UUID userId) {
-        return cardManagementService.findCardByUserId(userId);
+        return cardManagementService.findCardsByUserId(userId);
     }
 
     @Transactional(readOnly = true)

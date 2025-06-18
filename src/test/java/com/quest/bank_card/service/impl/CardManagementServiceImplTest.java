@@ -112,11 +112,26 @@ public class CardManagementServiceImplTest extends BankCardApplicationTests {
     }
 
     @Test
-    public void findAllCardsTest() {
+    public void findAllCardsTest_withUser() {
         List<Card> cards = cardManagementService.findAllCards();
 
         assertNotNull(cards);
         assertNotEquals(0, cards.size());
+
+        User us = cards.get(0).getUser();
+
+        assertNotNull(us);
+    }
+
+    @Test
+    public void findAllCardsByIdsTest() {
+        UUID cardF = UUID.fromString("faad7771-46d7-4264-8570-df21b68ed5ff");
+        UUID cardS = UUID.fromString("faad8889-46d7-4264-8570-df21b68ed5ff");
+        List<Card> cards = cardManagementService.findAllCardsByIds(List.of(cardF, cardS));
+
+        assertNotEquals(0, cards.size());
+        assertEquals(cardF, cards.get(0).getId());
+        assertEquals(cardS, cards.get(1).getId());
     }
 
     @Test
@@ -128,19 +143,25 @@ public class CardManagementServiceImplTest extends BankCardApplicationTests {
     }
 
     @Test
-    public void UpdateSameCardStatusTest() {
+    public void UpdateCardStatusTestN_sameStatus() {
         assertThrows(ValidationException.class,
                 () -> cardManagementService.updateCardStatusById(UUID.fromString("1b52679d-1c73-46a2-95ff-0ea5756f2513"), "EXPIRED"));
     }
 
     @Test
-    public void isCardOwnedByPositiveTest() {
+    public void UpdateCardStatusTestN_invalidStatus() {
+        assertThrows(ValidationException.class,
+                () -> cardManagementService.updateCardStatusById(UUID.fromString("1b52679d-1c73-46a2-95ff-0ea5756f2513"), "EXPED"));
+    }
+
+    @Test
+    public void isCardOwnedByTest() {
         assertTrue(cardManagementService.isCardOwnedBy(UUID.fromString("1b52679d-1c73-46a2-95ff-0ea5756f2513"),
                 UUID.fromString("d17ba058-3684-41cc-9cdb-3ea95d0a9d6f")));
     }
 
     @Test
-    public void isCardOwnedByNegativeTest() {
+    public void isCardOwnedByTest_false() {
         assertFalse(cardManagementService.isCardOwnedBy(UUID.fromString("1b52679d-1c73-46a2-95ff-0ea5756f2513"),
                 UUID.fromString("d17ba058-4684-41cc-9cdb-3ea95d0a9d6f")));
     }
@@ -197,4 +218,24 @@ public class CardManagementServiceImplTest extends BankCardApplicationTests {
         });
     }
 
+    @Test
+    public void findCardsByUserId() {
+        UUID userId = UUID.fromString("d17ba058-3684-41cc-9cdb-3ea95d0a9d6f");
+        List<Card> cards = cardManagementService.findCardsByUserId(userId);
+
+        assertNotEquals(0, cards.size());
+    }
+
+    @Test
+    public void validateAndUpdateExpiredCardTest() {
+        UUID cardId = UUID.fromString("271ce08b-2a39-43fe-bfea-ab83a8ba7a9f");
+        Card card = cardManagementService.findCardById(cardId);
+
+        assertEquals(Status.ACTIVE, card.getStatus());
+
+        cardManagementService.validateAndUpdateExpiredCard(cardId);
+        card = cardManagementService.findCardById(cardId);
+
+        assertEquals(Status.EXPIRED, card.getStatus());
+    }
 }

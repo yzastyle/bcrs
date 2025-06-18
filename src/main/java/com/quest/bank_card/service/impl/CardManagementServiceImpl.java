@@ -43,7 +43,7 @@ public class CardManagementServiceImpl implements CardManagementService {
     }
 
     @Override
-    public List<Card> findAllByIds(List<UUID> ids) {
+    public List<Card> findAllCardsByIds(List<UUID> ids) {
         return cardRepository.findAllById(ids);
     }
 
@@ -83,7 +83,7 @@ public class CardManagementServiceImpl implements CardManagementService {
     }
 
     @Override
-    public List<Card> findCardByUserId(UUID id) {
+    public List<Card> findCardsByUserId(UUID id) {
         return cardRepository.findByUserId(id);
     }
 

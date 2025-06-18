@@ -54,7 +54,7 @@ public class Card {
         Status cardStatus;
         try {
             cardStatus = Status.valueOf(status);
-        } catch (ValidationException validationException) {
+        } catch (IllegalArgumentException illegalArgumentException) {
             throw new ValidationException("Status: " + status + " is not exists");
         }
         if (this.status == cardStatus) throw new ValidationException("Card is already " + cardStatus);

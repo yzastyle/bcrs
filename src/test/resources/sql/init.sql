@@ -28,6 +28,8 @@ ALTER TABLE cards
 
 INSERT INTO users (id, login, name, password, role)
 VALUES
+  ('b0e32aeb-a3f7-4c03-ba45-aa9bba16c934', 'deleteCardsByUserIdTestN_nonZeroBalance', 'deleteCardsByUserIdTestN_nonZeroBalance', 'password', 'USER'),
+  ('d0935ff9-54ea-4740-b32b-06da1f201121', 'deleteCardsByUserIdTest', 'deleteCardsByUserIdTest', 'password', 'USER'),
   ('d17ba058-3684-41cc-9cdb-3ea95d009000', 'findCardsByCriteriaTestEmpty', 'findCardsByCriteriaTestEmpty', 'password', 'USER'),
   ('d17ba058-3684-41cc-9cdb-3ea95d0a9d6f', 'alice',             'Alice Johnson',             'password', 'USER'),
   ('d17ba058-3684-41cc-9fdb-3ea95d0a9d6f', 'Sash_1',            'Sash_1',                    'password', 'USER'),
@@ -47,6 +49,51 @@ VALUES
 
 INSERT INTO cards (id, number, owner, expiration_date, status, deposit, user_id)
 VALUES
+(
+    '5abbe672-a9b8-4ed7-8cda-6437b063a55e',
+    '4111222233334444',
+    'transferBetweenUserCardTest_BlockStatus',
+    '12/25',
+    'BLOCKED',
+    1000,
+    'd17ba058-3684-41cc-9cdb-3ea95d0a9d6f'
+  ),
+(
+    '12f20c10-c056-4073-9416-edab0e4e2b78',
+    '4111222233334444',
+    'deleteCardsByUserIdTestN_nonZeroBalance',
+    '12/25',
+    'ACTIVE',
+    0,
+    'b0e32aeb-a3f7-4c03-ba45-aa9bba16c934'
+  ),
+(
+    'f2908610-693b-4a66-9ee7-c5b44de01352',
+    '4111222233334444',
+    'deleteCardsByUserIdTestN_nonZeroBalance',
+    '12/25',
+    'ACTIVE',
+    0.01,
+    'b0e32aeb-a3f7-4c03-ba45-aa9bba16c934'
+  ),
+(
+    'b8f39d7c-1cf1-49bb-a6cb-403dfee5f928',
+    '4111222233334444',
+    'deleteCardsByUserIdTest',
+    '12/25',
+    'ACTIVE',
+    0,
+    'd0935ff9-54ea-4740-b32b-06da1f201121'
+  ),
+(
+    'f5b27da0-ba64-4855-944d-d22fbfb82f5a',
+    '4111222233334444',
+    'deleteCardsByUserIdTest',
+    '12/25',
+    'ACTIVE',
+    0,
+    'd0935ff9-54ea-4740-b32b-06da1f201121'
+  ),
 (
     'faad7771-46d7-4264-8570-df21b68ed5ff',
     '4111222233334444',
@@ -425,6 +472,14 @@ VALUES
                     '3333466655556666',
                     'Bob Smith',
                     '01/27',
+                    'ACTIVE',
+                    250.75,
+                    '11111ab1-15a3-4a5f-8f0c-1a2df111cc6a'
+                  ),
+                    ('271ce08b-2a39-43fe-bfea-ab83a8ba7a9f',
+                    '3333466655556666',
+                    'Bob Smith',
+                    '01/24',
                     'ACTIVE',
                     250.75,
                     '11111ab1-15a3-4a5f-8f0c-1a2df111cc6a'

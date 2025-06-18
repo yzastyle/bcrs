@@ -34,7 +34,7 @@ public class UserManagementServiceImplTest extends BankCardApplicationTests {
     }
 
     @Test
-    public void createUserTestNegative() {
+    public void createUserTestN_loginIsAlreadyExists() {
         User user = new User("Sash_3", "name", "test");
         user.assignRole("test");
 
@@ -68,11 +68,11 @@ public class UserManagementServiceImplTest extends BankCardApplicationTests {
         List<Card> cards = user.getCards();
 
         assertNotNull(cards);
-        assertEquals(UUID.fromString("ff8d0496-46d7-4264-8570-df21b68ed5ff"), cards.get(0).getId());
-        assertEquals("Alice Johnson", cards.get(0).getOwner());
+        assertEquals(UUID.fromString("5abbe672-a9b8-4ed7-8cda-6437b063a55e"), cards.get(0).getId());
+        assertEquals("transferBetweenUserCardTest_BlockStatus", cards.get(0).getOwner());
         assertEquals("4111222233334444", cards.get(0).getNumber());
         assertEquals("12/25", cards.get(0).getExpirationDate());
-        assertEquals(Status.ACTIVE, cards.get(0).getStatus());
+        assertEquals(Status.BLOCKED, cards.get(0).getStatus());
         assertFalse(cards.get(0).getDeposit().isLessThan(new Money(new BigDecimal("1000.00"))));
     }
 
@@ -93,4 +93,19 @@ public class UserManagementServiceImplTest extends BankCardApplicationTests {
         assertEquals(login, user.getLogin());
     }
 
+    @Test
+    public void findUserByLoginTestN_userNotFound() {
+        assertThrows(UserNotFoundException.class, () -> userManagementService.findUserByLogin("notlogin"));
+    }
+
+    @Test
+    public void isExistsTest() {
+        assertTrue(userManagementService.isExists("Sash_3"));
+    }
+
+    @Test
+    public void isFirstUserNegative() {
+        assertFalse(userManagementService.isFirstUser());
+
+    }
 }

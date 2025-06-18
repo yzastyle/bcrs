@@ -11,6 +11,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
@@ -58,6 +59,17 @@ public class GlobalExceptionHandler {
                 ex.getMessage(),
                 LocalDateTime.now(),
                 errors,
+                HttpStatus.BAD_REQUEST.value());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponseDto> handleMissArgumentException(MethodArgumentTypeMismatchException ex) {
+        ErrorResponseDto error = new ErrorResponseDto(UUID.randomUUID(),
+                "ARGUMENT_VALIDATION_ERROR",
+                ex.getMessage(),
+                LocalDateTime.now(),
+                null,
                 HttpStatus.BAD_REQUEST.value());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }

@@ -3,6 +3,8 @@ package com.quest.bank_card.controller.impl;
 import com.quest.bank_card.dto.CardResponseDto;
 import com.quest.bank_card.entity.Card;
 import com.quest.bank_card.entity.Money;
+import com.quest.bank_card.exception.CardNotFoundException;
+import com.quest.bank_card.exception.handler.GlobalExceptionHandler;
 import com.quest.bank_card.model.Status;
 import com.quest.bank_card.service.CardManagementService;
 import com.quest.bank_card.service.CardMapperService;
@@ -48,6 +50,7 @@ class CardManagementControllerImplTest {
     void setUp() {
         mockMvc = MockMvcBuilders
                 .standaloneSetup(cardManagementController)
+                .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
 
         testCardId1 = UUID.fromString("123e4567-e89b-12d3-a456-426614174001");
@@ -94,7 +97,6 @@ class CardManagementControllerImplTest {
 
         mockMvc.perform(get("/api/v1/cards")
                         .accept("application/json;charset=UTF-8"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$").isArray())
@@ -115,7 +117,6 @@ class CardManagementControllerImplTest {
 
         mockMvc.perform(get("/api/v1/cards/{id}", testCardId1)
                         .accept("application/json;charset=UTF-8"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.id").value(testCardId1.toString()))
@@ -128,51 +129,43 @@ class CardManagementControllerImplTest {
     }
 
     @Test
-    void getCardByIdTest_InvalidUUID() throws Exception {
+    void getCardByIdTestN_cardNotFound() throws Exception {
+        CardNotFoundException cardNotFoundException = new CardNotFoundException(testCardId1);
+        when(cardManagementService.findCardById(testCardId1)).thenThrow(cardNotFoundException);
+
+        mockMvc.perform(get("/api/v1/cards/{id}", testCardId1)
+                        .accept("application/json;charset=UTF-8"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.errorCode").value("CARD_NOT_FOUND_ERROR"))
+                .andExpect(jsonPath("$.message").value("Card with id=123e4567-e89b-12d3-a456-426614174001 not found"))
+                .andExpect(jsonPath("$.timestamp").exists())
+                .andExpect(jsonPath("$.statusCode").value(404));
+
+        verify(cardManagementService, times(1)).findCardById(testCardId1);
+        verify(cardMapperService, never()).toDto(testCard1);
+    }
+
+    @Test
+    void getCardByIdTestN_InvalidId() throws Exception {
         mockMvc.perform(get("/api/v1/cards/{id}", "invalid-uuid")
                         .accept("application/json;charset=UTF-8"))
-                .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Method parameter 'id': Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: invalid-uuid"));
 
         verify(cardManagementService, never()).findCardById(any(UUID.class));
         verify(cardMapperService, never()).toDto(any(Card.class));
     }
 
-//    @Test
-//    void updateStatusTest() throws Exception {
-//        when(validationService.validateStatus("active")).thenReturn(Status.ACTIVE);
-//        doNothing().when(cardManagementService).updateCardStatusById(testCardId1, Status.ACTIVE);
-//
-//        mockMvc.perform(patch("/api/v1/cards/{id}/{status}", testCardId1, "active"))
-//                .andDo(print())
-//                .andExpect(status().isNoContent())
-//                .andExpect(content().string("The card status was successfully updated"));
-//
-//        verify(validationService, times(1)).validateStatus("active");
-//        verify(cardManagementService, times(1)).updateCardStatusById(testCardId1, Status.ACTIVE);
-//    }
+    @Test
+    void updateStatusTest() throws Exception {
+        doNothing().when(cardManagementService).updateCardStatusById(testCardId1, "active");
 
-//    @Test
-//    void updateStatusTest_InvalidUUID() throws Exception {
-//        mockMvc.perform(patch("/api/v1/cards/{id}/{status}", "invalid-uuid", "active"))
-//                .andDo(print())
-//                .andExpect(status().isBadRequest());
-//
-//        verify(validationService, never()).validateStatus(any());
-//        verify(cardManagementService, never()).updateCardStatusById(any(UUID.class), any());
-//    }
+        mockMvc.perform(patch("/api/v1/cards/{id}/{status}", testCardId1, "active"))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string("The card status was successfully updated"));
 
-//    @Test
-//    void updateStatusTest_BlockStatus() throws Exception {
-//        when(validationService.validateStatus("blocked")).thenReturn(Status.BLOCKED);
-//        doNothing().when(cardManagementService).updateCardStatusById(testCardId1, Status.BLOCKED);
-//
-//        mockMvc.perform(patch("/api/v1/cards/{id}/{status}", testCardId1, "blocked"))
-//                .andDo(print())
-//                .andExpect(status().isNoContent())
-//                .andExpect(content().string("The card status was successfully updated"));
-//
-//        verify(validationService, times(1)).validateStatus("blocked");
-//        verify(cardManagementService, times(1)).updateCardStatusById(testCardId1, Status.BLOCKED);
-//    }
+        verify(cardManagementService, times(1)).updateCardStatusById(testCardId1, "active");
+    }
 }

@@ -3,6 +3,7 @@ package com.quest.bank_card.controller.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quest.bank_card.dto.UserResponseDto;
 import com.quest.bank_card.entity.User;
+import com.quest.bank_card.exception.handler.GlobalExceptionHandler;
 import com.quest.bank_card.service.UserManagementService;
 import com.quest.bank_card.service.UserMapperService;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,6 +51,7 @@ class UserManagementControllerImplTest {
     void setUp() {
         mockMvc = MockMvcBuilders
                 .standaloneSetup(userManagementController)
+                .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
 
         objectMapper = new ObjectMapper();
@@ -88,7 +90,7 @@ class UserManagementControllerImplTest {
     }
 
     @Test
-    void deleteUsersByIdsTest_WithValidIds() throws Exception {
+    void deleteUsersByIdsTest() throws Exception {
         List<UUID> userIds = Arrays.asList(testUserId1, testUserId2);
         doNothing().when(userManagementService).deleteUsersByIds(userIds);
 
@@ -102,18 +104,17 @@ class UserManagementControllerImplTest {
     }
 
     @Test
-    void deleteUsersByIdsTest_WithoutContentType() throws Exception {
+    void deleteUsersByIdsTestN_withoutContentType() throws Exception {
         List<UUID> userIds = Collections.singletonList(testUserId1);
 
         mockMvc.perform(delete("/api/v1/users")
                         .content(objectMapper.writeValueAsString(userIds)))
-                .andDo(print())
                 .andExpect(status().isUnsupportedMediaType());
         verify(userManagementService, never()).deleteUsersByIds(anyList());
     }
 
     @Test
-    void deleteUserByIdTest_WithValidId() throws Exception {
+    void deleteUserByIdTest() throws Exception {
         doNothing().when(userManagementService).deleteUserById(testUserId1);
 
         mockMvc.perform(delete("/api/v1/users/{id}", testUserId1))
@@ -124,10 +125,11 @@ class UserManagementControllerImplTest {
     }
 
     @Test
-    void deleteUserByIdTest_WithInvalidUUID() throws Exception {
+    void deleteUserByIdTestN_WithInvalidId() throws Exception {
         mockMvc.perform(delete("/api/v1/users/{id}", "invalid-uuid"))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Method parameter 'id': Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: invalid-uuid"));
 
         verify(userManagementService, never()).deleteUserById(any(UUID.class));
     }
@@ -175,11 +177,12 @@ class UserManagementControllerImplTest {
     }
 
     @Test
-    void getUserByIdTest_InvalidUUIDtest() throws Exception {
+    void getUserByIdTestN_invalidId() throws Exception {
         mockMvc.perform(get("/api/v1/users/{id}", "invalid-uuid")
                         .accept("application/json;charset=UTF-8"))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Method parameter 'id': Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: invalid-uuid"));
 
         verify(userManagementService, never()).findUserById(any(UUID.class));
         verify(userMapperService, never()).toDto(any(User.class));
