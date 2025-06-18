@@ -23,8 +23,14 @@ public class TransferServiceImpl implements TransferService {
     @Override
     @Transactional
     public void transferBetweenUserCards(UUID fromCardId, UUID toCardId, UUID userId, Money amount) {
-        Card from = cardManagementService.findCardByIdWithLock(fromCardId);
-        Card to = cardManagementService.findCardByIdWithLock(toCardId);
+        UUID firstId = fromCardId.compareTo(toCardId) < 0 ? fromCardId : toCardId;
+        UUID secondId = fromCardId.compareTo(toCardId) < 0 ? toCardId : fromCardId;
+
+        Card firstCard = cardManagementService.findCardByIdWithLock(firstId);
+        Card secondCard = cardManagementService.findCardByIdWithLock(secondId);
+
+        Card from = firstCard.getId().equals(fromCardId) ? firstCard : secondCard;
+        Card to = firstCard.getId().equals(toCardId) ? firstCard : secondCard;
 
         validateTransfer(from, to, userId);
         validateAvailableDeposit(from, amount);
