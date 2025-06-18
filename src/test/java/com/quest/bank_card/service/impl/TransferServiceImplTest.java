@@ -28,7 +28,9 @@ public class TransferServiceImplTest extends BankCardApplicationTests {
         UUID fromCardId = UUID.fromString("ff8d0496-46d7-4264-8570-df21b68ed5ff");
         UUID toCardId = UUID.fromString("1b52679d-1c73-46a2-95ff-0ea5756f2513");
 
-        assertThrows(ValidationException.class, () -> transferService.transferBetweenUserCards(fromCardId, toCardId, userId, new Money(new BigDecimal("1000.00"))));
+        assertThrows(ValidationException.class,
+                () -> transferService
+                        .transferBetweenUserCards(fromCardId, toCardId, userId, new Money(new BigDecimal("1000.00"))));
     }
 
     @Test
@@ -37,7 +39,9 @@ public class TransferServiceImplTest extends BankCardApplicationTests {
         UUID fromCardId = UUID.fromString("ff8d0496-46d7-4264-8570-df21b68ed5ff");
         UUID toCardId = UUID.fromString("5abbe672-a9b8-4ed7-8cda-6437b063a55e");
 
-        assertThrows(ValidationException.class, () -> transferService.transferBetweenUserCards(fromCardId, toCardId, userId, new Money(new BigDecimal("1000.00"))));
+        assertThrows(ValidationException.class,
+                () -> transferService.
+                        transferBetweenUserCards(fromCardId, toCardId, userId, new Money(new BigDecimal("1000.00"))));
     }
 
     @Test
@@ -48,7 +52,8 @@ public class TransferServiceImplTest extends BankCardApplicationTests {
 
         transferService.transferBetweenUserCards(fromCardId, toCardId, userId, new Money(new BigDecimal("250.75")));
 
-        assertEquals(0, cardManagementService.findCardById(toCardId).getDeposit().getAmount().compareTo(new BigDecimal("501.50")));
+        assertEquals(0,
+                cardManagementService.findCardById(toCardId).getDeposit().getAmount().compareTo(new BigDecimal("501.50")));
     }
 
     @Test
@@ -57,7 +62,9 @@ public class TransferServiceImplTest extends BankCardApplicationTests {
         UUID fromCardId = UUID.fromString("b351ba45-f03b-48dd-ac62-c9f4fbae2707");
         UUID toCardId = UUID.fromString("dcd57932-0e43-4ae4-94eb-07a2bff90f29");
 
-        assertThrows(InsufficientFundsException.class, () -> transferService.transferBetweenUserCards(fromCardId, toCardId, userId, new Money(new BigDecimal("1000.01"))));
+        assertThrows(InsufficientFundsException.class,
+                () -> transferService.
+                        transferBetweenUserCards(fromCardId, toCardId, userId, new Money(new BigDecimal("1000.01"))));
     }
 
     @Test
@@ -65,7 +72,9 @@ public class TransferServiceImplTest extends BankCardApplicationTests {
         UUID userId = UUID.fromString("11111ab1-15a3-4a5f-8f0c-1a2df111cc6a");
         UUID fromCardId = UUID.fromString("9c05a73f-38a4-0000-91bf-0047dddfb70f");
 
-        assertThrows(ValidationException.class, () -> transferService.transferBetweenUserCards(fromCardId, fromCardId, userId,new Money(new BigDecimal("250.75"))));
+        assertThrows(ValidationException.class,
+                () -> transferService
+                        .transferBetweenUserCards(fromCardId, fromCardId, userId,new Money(new BigDecimal("250.75"))));
     }
 
     @Test
@@ -74,6 +83,8 @@ public class TransferServiceImplTest extends BankCardApplicationTests {
         UUID fromCardId = UUID.fromString("ff8d0496-46d7-4264-8570-df21b68ed5ff");
         UUID toCardId = UUID.fromString("faad0001-46d7-4264-8570-df21b68ed5ff");
 
-        assertThrows(UnauthorizedException.class, () -> transferService.transferBetweenUserCards(fromCardId, toCardId, userId, new Money(new BigDecimal("1000.00"))));
+        assertThrows(UnauthorizedException.class,
+                () -> transferService
+                        .transferBetweenUserCards(fromCardId, toCardId, userId, new Money(new BigDecimal("1000.00"))));
     }
 }

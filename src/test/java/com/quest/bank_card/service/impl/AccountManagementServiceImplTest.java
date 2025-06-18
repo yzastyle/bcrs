@@ -36,6 +36,7 @@ public class AccountManagementServiceImplTest extends BankCardApplicationTests {
         assertNotNull(cardId);
 
         List<Card> cards = cardManagementService.findCardsByUserId(userId);
+
         assertNotEquals(0, cards.size());
         assertEquals(cardId, cards.get(cards.size() - 1).getId());
     }
@@ -61,11 +62,11 @@ public class AccountManagementServiceImplTest extends BankCardApplicationTests {
 
     @Test
     public void deleteCardByIdTest() {
+        UUID cardId = UUID.fromString("aaad0000-46d7-4264-8137-df21b68ed5ff");
         accountManagementService.deleteCardById(UUID.fromString("aaaaaab1-15a3-4a5f-8f0c-1a2dfc80cc6a"),
-                UUID.fromString("aaad0000-46d7-4264-8137-df21b68ed5ff"));
+                cardId);
 
-        assertThrows(CardNotFoundException.class,
-                () -> cardManagementService.findCardById(UUID.fromString("aaad0000-46d7-4264-8137-df21b68ed5ff")));
+        assertThrows(CardNotFoundException.class, () -> cardManagementService.findCardById(cardId));
     }
 
     @Test
@@ -76,7 +77,7 @@ public class AccountManagementServiceImplTest extends BankCardApplicationTests {
     }
 
     @Test
-    public void deleteCardsByIdPositiveTest() {
+    public void deleteCardsByIdTest() {
         accountManagementService.deleteCardsByIds(UUID.fromString("10f80ab1-15a3-4a5f-8f0c-1a2dfc80cc6a"),
                 List.of(UUID.fromString("bbbd0496-46d7-1155-6670-df21b68ed5ff"),
                         UUID.fromString("bbbd0496-35d0-3334-8570-df21b68ed5ff")));
@@ -86,7 +87,7 @@ public class AccountManagementServiceImplTest extends BankCardApplicationTests {
     }
 
     @Test
-    public void deleteCardsByIdNegativeTest() {
+    public void deleteCardsByIdTestN_doesNotBelongToUser() {
         assertThrows(UnauthorizedException.class,
                 () -> accountManagementService.deleteCardsByIds(UUID.fromString("d17ba058-3684-41cc-9cdb-3ea95d009000"),
                         List.of(UUID.fromString("1b52679d-1c11-66a2-95ff-0ea5756f2513"),
@@ -98,6 +99,7 @@ public class AccountManagementServiceImplTest extends BankCardApplicationTests {
         UUID userId = UUID.fromString("d0935ff9-54ea-4740-b32b-06da1f201121");
         accountManagementService.deleteCardsByUserId(userId);
         List<Card> cards = cardManagementService.findCardsByUserId(userId);
+
         assertEquals(0, cards.size());
     }
 

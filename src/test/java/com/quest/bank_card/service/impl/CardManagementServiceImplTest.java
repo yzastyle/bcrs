@@ -67,7 +67,6 @@ public class CardManagementServiceImplTest extends BankCardApplicationTests {
                 "12/29", Status.ACTIVE, new Money(new BigDecimal(1000)));
         firstCard.setUser(user);
         secondCard.setUser(user);
-
         List<Card> cards = cardManagementService.saveAllCards(List.of(firstCard, secondCard));
 
         assertNotNull(cards);
@@ -83,7 +82,6 @@ public class CardManagementServiceImplTest extends BankCardApplicationTests {
                 "12/29", Status.ACTIVE, new Money(new BigDecimal(1000)));
         firstCard.setUser(user);
         secondCard.setUser(user);
-
         List<Card> cards = cardManagementService.saveAllCards(List.of(firstCard, secondCard));
 
         assertNotNull(cards);
@@ -93,22 +91,20 @@ public class CardManagementServiceImplTest extends BankCardApplicationTests {
 
     @Test
     public void deleteCardTest() {
-        cardManagementService.deleteCardById(UUID.fromString("ff8d0496-46d7-4264-8570-df21b68ed5ff"));
+        UUID cardId = UUID.fromString("ff8d0496-46d7-4264-8570-df21b68ed5ff");
+        cardManagementService.deleteCardById(cardId);
 
-        assertThrows(CardNotFoundException.class,
-                () -> cardManagementService.findCardById(UUID.fromString("ff8d0496-46d7-4264-8570-df21b68ed5ff")));
+        assertThrows(CardNotFoundException.class, () -> cardManagementService.findCardById(cardId));
     }
 
     @Test
     public void deletesCardTest() {
-        List<UUID> ids = List.of(UUID.fromString("1f8d0496-46d7-4264-8570-df21b68ed5ff"),
-                UUID.fromString("2b52679d-1c73-46a2-95ff-0ea5756f2513"));
-        cardManagementService.deleteCardsByIds(ids);
+        UUID cardId1 = UUID.fromString("1f8d0496-46d7-4264-8570-df21b68ed5ff");
+        UUID cardId2 = UUID.fromString("2b52679d-1c73-46a2-95ff-0ea5756f2513");
+        cardManagementService.deleteCardsByIds(List.of(cardId1, cardId2));
 
-        assertThrows(CardNotFoundException.class,
-                () -> cardManagementService.findCardById(UUID.fromString("1f8d0496-46d7-4264-8570-df21b68ed5ff")));
-        assertThrows(CardNotFoundException.class,
-                () -> cardManagementService.findCardById(UUID.fromString("2b52679d-1c73-46a2-95ff-0ea5756f2513")));
+        assertThrows(CardNotFoundException.class, () -> cardManagementService.findCardById(cardId1));
+        assertThrows(CardNotFoundException.class, () -> cardManagementService.findCardById(cardId2));
     }
 
     @Test
@@ -125,13 +121,13 @@ public class CardManagementServiceImplTest extends BankCardApplicationTests {
 
     @Test
     public void findAllCardsByIdsTest() {
-        UUID cardF = UUID.fromString("faad7771-46d7-4264-8570-df21b68ed5ff");
-        UUID cardS = UUID.fromString("faad8889-46d7-4264-8570-df21b68ed5ff");
-        List<Card> cards = cardManagementService.findAllCardsByIds(List.of(cardF, cardS));
+        UUID cardId1 = UUID.fromString("faad7771-46d7-4264-8570-df21b68ed5ff");
+        UUID cardId2 = UUID.fromString("faad8889-46d7-4264-8570-df21b68ed5ff");
+        List<Card> cards = cardManagementService.findAllCardsByIds(List.of(cardId1, cardId2));
 
         assertNotEquals(0, cards.size());
-        assertEquals(cardF, cards.get(0).getId());
-        assertEquals(cardS, cards.get(1).getId());
+        assertEquals(cardId1, cards.get(0).getId());
+        assertEquals(cardId2, cards.get(1).getId());
     }
 
     @Test
@@ -145,13 +141,15 @@ public class CardManagementServiceImplTest extends BankCardApplicationTests {
     @Test
     public void UpdateCardStatusTestN_sameStatus() {
         assertThrows(ValidationException.class,
-                () -> cardManagementService.updateCardStatusById(UUID.fromString("1b52679d-1c73-46a2-95ff-0ea5756f2513"), "EXPIRED"));
+                () -> cardManagementService
+                        .updateCardStatusById(UUID.fromString("1b52679d-1c73-46a2-95ff-0ea5756f2513"), "EXPIRED"));
     }
 
     @Test
     public void UpdateCardStatusTestN_invalidStatus() {
         assertThrows(ValidationException.class,
-                () -> cardManagementService.updateCardStatusById(UUID.fromString("1b52679d-1c73-46a2-95ff-0ea5756f2513"), "EXPED"));
+                () -> cardManagementService
+                        .updateCardStatusById(UUID.fromString("1b52679d-1c73-46a2-95ff-0ea5756f2513"), "EXPED"));
     }
 
     @Test
@@ -183,7 +181,6 @@ public class CardManagementServiceImplTest extends BankCardApplicationTests {
     public void findCardsByOneCriteriaTest() {
         CardSearchCriteriaDto oneCriteria = CardSearchCriteriaDto.builder()
                 .status(Status.ACTIVE).build();
-
         Specification<Card> spec = CardSpecifications.withCriteria(
                 UUID.fromString("d17ba058-3684-41cc-9cdb-3ea95d009000"),
                 oneCriteria
@@ -202,7 +199,6 @@ public class CardManagementServiceImplTest extends BankCardApplicationTests {
                 .status(Status.ACTIVE)
                 .expirationDate("12/24")
                 .build();
-
         Specification<Card> spec = CardSpecifications.withCriteria(
                 UUID.fromString("d17ba058-3684-41cc-9cdb-3ea95d009000"),
                 MultipleCriteria

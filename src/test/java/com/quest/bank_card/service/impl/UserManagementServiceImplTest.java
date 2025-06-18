@@ -43,22 +43,20 @@ public class UserManagementServiceImplTest extends BankCardApplicationTests {
 
     @Test
     public void deleteUserTest() {
-        userManagementService.deleteUserById(UUID.fromString("58c80ab1-15a3-4a5f-8f0c-1a2dfc80cc6a"));
+        UUID userId = UUID.fromString("58c80ab1-15a3-4a5f-8f0c-1a2dfc80cc6a");
+        userManagementService.deleteUserById(userId);
 
-        assertThrows(UserNotFoundException.class,
-                () -> userManagementService.findUserById(UUID.fromString("58c80ab1-15a3-4a5f-8f0c-1a2dfc80cc6a")));
+        assertThrows(UserNotFoundException.class, () -> userManagementService.findUserById(userId));
     }
 
     @Test
     public void deleteUsersTest() {
-        List<UUID> ids = List.of(UUID.fromString("d17ba058-3684-41cc-9fdb-3ea95d0a9d6f"),
-                UUID.fromString("d17ba058-3684-41cc-9cfb-3ea95d0a9d6f"));
-        userManagementService.deleteUsersByIds(ids);
+        UUID userId1 = UUID.fromString("d17ba058-3684-41cc-9fdb-3ea95d0a9d6f");
+        UUID userId2 = UUID.fromString("d17ba058-3684-41cc-9cfb-3ea95d0a9d6f");
+        userManagementService.deleteUsersByIds(List.of(userId1, userId2));
 
-        assertThrows(UserNotFoundException.class,
-                () -> userManagementService.findUserById(UUID.fromString("d17ba058-3684-41cc-9fdb-3ea95d0a9d6f")));
-        assertThrows(UserNotFoundException.class,
-                () -> userManagementService.findUserById(UUID.fromString("d17ba058-3684-41cc-9cfb-3ea95d0a9d6f")));
+        assertThrows(UserNotFoundException.class, () -> userManagementService.findUserById(userId1));
+        assertThrows(UserNotFoundException.class, () -> userManagementService.findUserById(userId2));
     }
 
     @Test
@@ -79,6 +77,7 @@ public class UserManagementServiceImplTest extends BankCardApplicationTests {
     @Test
     public void findAllUsersTest() {
         List<User> users = userManagementService.findAllUsers();
+
         assertNotNull(users);
         assertNotEquals(0, users.size());
     }
@@ -99,13 +98,12 @@ public class UserManagementServiceImplTest extends BankCardApplicationTests {
     }
 
     @Test
-    public void isExistsTest() {
+    public void isExistsTestTrue() {
         assertTrue(userManagementService.isExists("Sash_3"));
     }
 
     @Test
-    public void isFirstUserNegative() {
+    public void isFirstUserFalse() {
         assertFalse(userManagementService.isFirstUser());
-
     }
 }

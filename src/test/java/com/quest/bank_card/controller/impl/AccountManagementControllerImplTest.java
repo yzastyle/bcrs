@@ -1,27 +1,31 @@
 package com.quest.bank_card.controller.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.quest.bank_card.dto.*;
+import com.quest.bank_card.dto.CardCreateDto;
+import com.quest.bank_card.dto.CardResponseDto;
 import com.quest.bank_card.entity.Card;
 import com.quest.bank_card.entity.Money;
 import com.quest.bank_card.exception.UnauthorizedException;
 import com.quest.bank_card.exception.ValidationException;
 import com.quest.bank_card.exception.handler.GlobalExceptionHandler;
 import com.quest.bank_card.model.Status;
-import com.quest.bank_card.service.*;
+import com.quest.bank_card.service.AccountManagementService;
+import com.quest.bank_card.service.CardGenerationService;
+import com.quest.bank_card.service.CardMapperService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -46,9 +50,7 @@ class AccountManagementControllerImplTest {
     private UUID testCardId1;
     private UUID testCardId2;
     private Card testCard1;
-    private Card testCard2;
     private CardResponseDto testCardDto1;
-    private CardResponseDto testCardDto2;
     private CardCreateDto testCardCreateDto;
 
     @BeforeEach
@@ -77,29 +79,9 @@ class AccountManagementControllerImplTest {
                 .deposit(new Money(new BigDecimal("1000.50")))
                 .dateCreate(LocalDateTime.of(2025, 1, 1, 12, 0))
                 .build();
-        testCard2 = Card.builder()
-                .id(testCardId2)
-                .number("1234567890123456")
-                .owner("IVAN PETROV")
-                .expirationDate("12/28")
-                .status(Status.ACTIVE)
-                .deposit(new Money(new BigDecimal("1000.50")))
-                .dateCreate(LocalDateTime.of(2025, 1, 1, 12, 0))
-                .build();
 
         testCardDto1 = CardResponseDto.builder()
                 .id(testCardId1)
-                .number("1234567890123456")
-                .owner("IVAN PETROV")
-                .expirationDate("12/28")
-                .status(Status.ACTIVE)
-                .deposit(BigDecimal.valueOf(1000.50))
-                .userId(testUserId)
-                .dateCreate(LocalDateTime.of(2025, 1, 1, 12, 0))
-                .build();
-
-        testCardDto2 = CardResponseDto.builder()
-                .id(testCardId2)
                 .number("1234567890123456")
                 .owner("IVAN PETROV")
                 .expirationDate("12/28")
